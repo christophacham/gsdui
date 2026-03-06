@@ -47,7 +47,7 @@ Plans:
   3. User can expand a plan card to see live output or jump to Console, and can view links to PLAN.md, diff, and SUMMARY.md
   4. User can configure agent routing (project default, stage override, plan override) from the Pipeline tab
   5. The entire UI uses the Aurora dark navy theme with correct background hierarchy, agent-colored badges, skeleton loading states, and a visible reconnecting indicator on WebSocket drop
-**Plans:** 4 plans
+**Plans:** 2/4 plans executed
 
 Plans:
 - [x] 02-01-PLAN.md -- SvelteKit scaffold, Aurora theme tokens, TypeScript types, WebSocket store, layout shell (sidebar, tabs, reconnect banner, skeletons)
@@ -96,6 +96,6 @@ Note: Phase 3 depends only on Phase 1, so it can begin after Phase 1 completes (
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Backend Foundation and State Pipeline | 4/4 | Complete | 2026-03-06 |
-| 2. Pipeline Dashboard | 1/4 | In progress | - |
+| 2. Pipeline Dashboard | 2/4 | In Progress|  |
 | 3. Interactive Terminal System | 0/2 | Not started | - |
 | 4. Multi-User, System Monitoring, and Production | 0/2 | Not started | - |

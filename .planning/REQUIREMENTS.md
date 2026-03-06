@@ -9,18 +9,18 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Pipeline Visualization
 
-- [ ] **PIPE-01**: User can view horizontal phase timeline showing all phases with status badges, names, and progress bars
-- [ ] **PIPE-02**: User can click a phase to see the 4-stage detail rail (Discuss → Plan → Execute → Verify) with current position
+- [x] **PIPE-01**: User can view horizontal phase timeline showing all phases with status badges, names, and progress bars
+- [x] **PIPE-02**: User can click a phase to see the 4-stage detail rail (Discuss → Plan → Execute → Verify) with current position
 - [ ] **PIPE-03**: User can see wave swim lanes within the execute stage, with plan cards arranged by dependency
 - [ ] **PIPE-04**: Plan cards show agent badge, status (queued/working/done/failed), wave number, step progress, and commit stats
 - [ ] **PIPE-05**: User can expand plan card output to see live agent stream or jump to Console tab
 - [ ] **PIPE-06**: Plan cards show links to view PLAN.md, diff, and SUMMARY.md
-- [ ] **PIPE-07**: Phase chips show decimal phase numbers (2.1, 2.2) sorted numerically
-- [ ] **PIPE-08**: Phases group by milestone when multiple milestones exist, with completed milestones collapsible
+- [x] **PIPE-07**: Phase chips show decimal phase numbers (2.1, 2.2) sorted numerically
+- [x] **PIPE-08**: Phases group by milestone when multiple milestones exist, with completed milestones collapsible
 - [ ] **PIPE-09**: Dependency arrows show between plans within wave visualization
 - [ ] **PIPE-10**: Agent routing configuration UI with project default → stage override → plan override hierarchy
 - [x] **PIPE-11**: Pipeline updates in real-time via WebSocket without page refresh
-- [ ] **PIPE-12**: Duration and timing display on phase chips and plan cards
+- [x] **PIPE-12**: Duration and timing display on phase chips and plan cards
 
 ### Console / Terminal
 
@@ -120,18 +120,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PIPE-01 | Phase 2 | Pending |
-| PIPE-02 | Phase 2 | Pending |
+| PIPE-01 | Phase 2 | Complete |
+| PIPE-02 | Phase 2 | Complete |
 | PIPE-03 | Phase 2 | Pending |
 | PIPE-04 | Phase 2 | Pending |
 | PIPE-05 | Phase 2 | Pending |
 | PIPE-06 | Phase 2 | Pending |
-| PIPE-07 | Phase 2 | Pending |
-| PIPE-08 | Phase 2 | Pending |
+| PIPE-07 | Phase 2 | Complete |
+| PIPE-08 | Phase 2 | Complete |
 | PIPE-09 | Phase 2 | Pending |
 | PIPE-10 | Phase 2 | Pending |
 | PIPE-11 | Phase 2 | Complete |
-| PIPE-12 | Phase 2 | Pending |
+| PIPE-12 | Phase 2 | Complete |
 | TERM-01 | Phase 3 | Pending |
 | TERM-02 | Phase 3 | Pending |
 | TERM-03 | Phase 3 | Pending |

@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 02-01 SvelteKit scaffold and layout shell
-last_updated: "2026-03-06T22:19:44Z"
-last_activity: 2026-03-06 -- Plan 02-01 executed (SvelteKit scaffold, Aurora theme, WebSocket store, layout shell)
+stopped_at: Completed 02-02 Phase timeline and stage rail
+last_updated: "2026-03-06T22:28:00Z"
+last_activity: 2026-03-06 -- Plan 02-02 executed (phase timeline, chips, stage rail, milestone grouping, pipeline page wiring)
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 12
-  completed_plans: 5
-  percent: 42
+  completed_plans: 6
+  percent: 50
 ---
 
 # Project State
@@ -26,29 +26,29 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 ## Current Position
 
 Phase: 2 of 4 (Pipeline Dashboard)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In Progress
-Last activity: 2026-03-06 -- Plan 02-01 executed (SvelteKit scaffold, Aurora theme, WebSocket store, layout shell)
+Last activity: 2026-03-06 -- Plan 02-02 executed (phase timeline, chips, stage rail, milestone grouping, pipeline page wiring)
 
-Progress: [****░░░░░░] 42%
+Progress: [*****░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 10.4 min
-- Total execution time: 0.87 hours
+- Total plans completed: 6
+- Average duration: 9.3 min
+- Total execution time: 0.93 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1 - Backend Foundation | 4/4 | 42 min | 10.5 min |
-| 2 - Pipeline Dashboard | 1/4 | 10 min | 10.0 min |
+| 2 - Pipeline Dashboard | 2/4 | 14 min | 7.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 9, 8, 14, 11, 10 min
-- Trend: stable
+- Last 5 plans: 8, 14, 11, 10, 4 min
+- Trend: accelerating
 
 *Updated after each plan completion*
 
@@ -80,6 +80,10 @@ Recent decisions affecting current work:
 - 02-01: WebSocket message routing wired in ProjectStore constructor
 - 02-01: ConfigUpdated/AgentHistoryUpdated deltas reload full state via REST (delta lacks payload)
 - 02-01: svelte-5-french-toast@2 (not @0.0.5 from research -- package versioning changed)
+- 02-02: All phases in single milestone group (PhaseState lacks per-phase milestone); derivable from ROADMAP later
+- 02-02: Stage rail maps 7 backend stages to 4 GSD stages with pulsing glow on executing
+- 02-02: Auto-selection priority for phase timeline: executing > next pending > last phase
+- 02-02: Completed milestones auto-collapse on load; current milestone always expanded
 
 ### Pending Todos
 
@@ -93,6 +97,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T22:19:44Z
-Stopped at: Completed 02-01-PLAN.md
-Resume file: .planning/phases/02-pipeline-dashboard/02-01-SUMMARY.md
+Last session: 2026-03-06T22:28:00Z
+Stopped at: Completed 02-02-PLAN.md
+Resume file: .planning/phases/02-pipeline-dashboard/02-02-SUMMARY.md
