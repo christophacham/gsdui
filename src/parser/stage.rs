@@ -23,10 +23,7 @@ pub fn derive_stage(files: &[String], plan_count: usize) -> PhaseStage {
     let has_plan = files.iter().any(|f| f.contains("-PLAN.md"));
     let has_verification = files.iter().any(|f| f.ends_with("VERIFICATION.md"));
 
-    let summary_count = files
-        .iter()
-        .filter(|f| f.contains("-SUMMARY.md"))
-        .count();
+    let summary_count = files.iter().filter(|f| f.contains("-SUMMARY.md")).count();
 
     // Priority: later stages override earlier
     if has_verification {
@@ -75,10 +72,7 @@ mod tests {
 
     #[test]
     fn test_derive_stage_researched() {
-        let files = vec![
-            "01-CONTEXT.md".to_string(),
-            "01-RESEARCH.md".to_string(),
-        ];
+        let files = vec!["01-CONTEXT.md".to_string(), "01-RESEARCH.md".to_string()];
         let stage = derive_stage(&files, 0);
         assert_eq!(stage, PhaseStage::Researched);
     }

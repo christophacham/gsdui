@@ -6,8 +6,8 @@ use sqlx::SqlitePool;
 use tokio::sync::{broadcast, mpsc};
 use tracing::{debug, error, info, warn};
 
-use super::debounce::DebouncedEvent;
 use super::FileEventKind;
+use super::debounce::DebouncedEvent;
 use crate::db;
 use crate::parser;
 
@@ -169,15 +169,8 @@ async fn process_file_event(
             .await;
         }
         FileType::VerificationMd { phase_number } => {
-            handle_verification_md(
-                project_id,
-                path,
-                &content,
-                &phase_number,
-                db,
-                broadcast_tx,
-            )
-            .await;
+            handle_verification_md(project_id, path, &content, &phase_number, db, broadcast_tx)
+                .await;
         }
         FileType::ContextOrResearch { phase_number } => {
             // Presence matters for stage derivation, but no content parsing needed
@@ -352,7 +345,11 @@ async fn handle_roadmap(
                     },
                 });
             }
-            debug!(project_id, phases = data.phases.len(), "Parsed ROADMAP.md successfully");
+            debug!(
+                project_id,
+                phases = data.phases.len(),
+                "Parsed ROADMAP.md successfully"
+            );
         }
         Err(e) => {
             record_parse_error(project_id, path, &e.to_string(), db, broadcast_tx).await;
@@ -417,7 +414,10 @@ async fn handle_plan_md(
             // Trigger stage re-derivation for the phase
             update_phase_stage(project_id, phase_number, path, db, broadcast_tx).await;
 
-            debug!(project_id, phase_number, plan_number, "Parsed PLAN.md successfully");
+            debug!(
+                project_id,
+                phase_number, plan_number, "Parsed PLAN.md successfully"
+            );
         }
         Err(e) => {
             record_parse_error(project_id, path, &e.to_string(), db, broadcast_tx).await;
@@ -511,7 +511,10 @@ async fn handle_summary_md(
             // Trigger stage re-derivation
             update_phase_stage(project_id, phase_number, path, db, broadcast_tx).await;
 
-            debug!(project_id, phase_number, plan_number, "Parsed SUMMARY.md successfully");
+            debug!(
+                project_id,
+                phase_number, plan_number, "Parsed SUMMARY.md successfully"
+            );
         }
         Err(e) => {
             record_parse_error(project_id, path, &e.to_string(), db, broadcast_tx).await;
@@ -554,7 +557,10 @@ async fn handle_verification_md(
             // Trigger stage re-derivation
             update_phase_stage(project_id, phase_number, path, db, broadcast_tx).await;
 
-            debug!(project_id, phase_number, "Parsed VERIFICATION.md successfully");
+            debug!(
+                project_id,
+                phase_number, "Parsed VERIFICATION.md successfully"
+            );
         }
         Err(e) => {
             record_parse_error(project_id, path, &e.to_string(), db, broadcast_tx).await;
@@ -616,7 +622,10 @@ async fn handle_agent_history(
                 project_id: project_id.to_string(),
                 change: StateChange::AgentHistoryUpdated { session_count },
             });
-            debug!(project_id, session_count, "Parsed agent-history.json successfully");
+            debug!(
+                project_id,
+                session_count, "Parsed agent-history.json successfully"
+            );
         }
         Err(e) => {
             record_parse_error(project_id, path, &e.to_string(), db, broadcast_tx).await;
@@ -693,10 +702,10 @@ async fn update_phase_stage(
 fn find_phase_dir(file_path: &Path) -> Option<PathBuf> {
     let mut current = file_path.parent()?;
     loop {
-        if let Some(parent) = current.parent() {
-            if parent.file_name().and_then(|n| n.to_str()) == Some("phases") {
-                return Some(current.to_path_buf());
-            }
+        if let Some(parent) = current.parent()
+            && parent.file_name().and_then(|n| n.to_str()) == Some("phases")
+        {
+            return Some(current.to_path_buf());
         }
         current = current.parent()?;
     }
@@ -707,10 +716,10 @@ async fn list_phase_files(dir: &Path) -> Result<Vec<String>, std::io::Error> {
     let mut files = Vec::new();
     let mut entries = tokio::fs::read_dir(dir).await?;
     while let Some(entry) = entries.next_entry().await? {
-        if entry.file_type().await?.is_file() {
-            if let Some(name) = entry.file_name().to_str() {
-                files.push(name.to_string());
-            }
+        if entry.file_type().await?.is_file()
+            && let Some(name) = entry.file_name().to_str()
+        {
+            files.push(name.to_string());
         }
     }
     Ok(files)
@@ -734,12 +743,11 @@ pub async fn bootstrap_project(
     info!(project_id, path = %planning_path.display(), "Bootstrapping project");
 
     // Clear previously resolved parse errors for this project (stale errors)
-    let _ = sqlx::query(
-        "DELETE FROM parse_errors WHERE project_id = ? AND resolved_at IS NOT NULL",
-    )
-    .bind(project_id)
-    .execute(db)
-    .await;
+    let _ =
+        sqlx::query("DELETE FROM parse_errors WHERE project_id = ? AND resolved_at IS NOT NULL")
+            .bind(project_id)
+            .execute(db)
+            .await;
 
     let mut file_count = 0u32;
     let mut error_count = 0u32;
@@ -803,24 +811,21 @@ pub async fn bootstrap_project(
 
     // Derive stage for each phase directory
     let phases_dir = planning_path.join("phases");
-    if phases_dir.exists() {
-        if let Ok(mut entries) = tokio::fs::read_dir(&phases_dir).await {
-            while let Some(entry) = entries.next_entry().await.ok().flatten() {
-                if entry.file_type().await.map(|t| t.is_dir()).unwrap_or(false) {
-                    let phase_dir = entry.path();
-                    let dir_name = entry
-                        .file_name()
-                        .to_str()
-                        .unwrap_or("")
-                        .to_string();
+    if phases_dir.exists()
+        && let Ok(mut entries) = tokio::fs::read_dir(&phases_dir).await
+    {
+        while let Some(entry) = entries.next_entry().await.ok().flatten() {
+            if entry.file_type().await.map(|t| t.is_dir()).unwrap_or(false) {
+                let phase_dir = entry.path();
+                let dir_name = entry.file_name().to_str().unwrap_or("").to_string();
 
-                    // Extract phase number from directory name (e.g., "01-backend-foundation" -> "01")
-                    if let Some(phase_num) = dir_name.split('-').next() {
-                        let files = list_phase_files(&phase_dir).await.unwrap_or_default();
-                        let plan_count = files.iter().filter(|f| f.contains("-PLAN.md")).count();
-                        let stage = parser::stage::derive_stage(&files, plan_count);
+                // Extract phase number from directory name (e.g., "01-backend-foundation" -> "01")
+                if let Some(phase_num) = dir_name.split('-').next() {
+                    let files = list_phase_files(&phase_dir).await.unwrap_or_default();
+                    let plan_count = files.iter().filter(|f| f.contains("-PLAN.md")).count();
+                    let stage = parser::stage::derive_stage(&files, plan_count);
 
-                        let _ = sqlx::query(
+                    let _ = sqlx::query(
                             "UPDATE phase_state SET stage = ?, updated_at = datetime('now') WHERE project_id = ? AND phase_number = ?",
                         )
                         .bind(stage.to_string())
@@ -828,7 +833,6 @@ pub async fn bootstrap_project(
                         .bind(phase_num)
                         .execute(db)
                         .await;
-                    }
                 }
             }
         }
@@ -880,14 +884,9 @@ async fn record_parse_error(
         "Parse error (last-known-good state preserved)"
     );
 
-    let _ = db::schema::insert_parse_error(
-        db,
-        project_id,
-        &path.to_string_lossy(),
-        error_msg,
-        "error",
-    )
-    .await;
+    let _ =
+        db::schema::insert_parse_error(db, project_id, &path.to_string_lossy(), error_msg, "error")
+            .await;
 
     let _ = broadcast_tx.send(StateUpdate {
         project_id: project_id.to_string(),

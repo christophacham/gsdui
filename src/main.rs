@@ -67,11 +67,8 @@ async fn main() {
     let cancel = CancellationToken::new();
 
     // Spawn debouncer task (75ms delay, midpoint of 50-100ms range)
-    let debouncer_handle = watcher::debounce::Debouncer::spawn(
-        file_event_rx,
-        debounced_tx,
-        Duration::from_millis(75),
-    );
+    let debouncer_handle =
+        watcher::debounce::Debouncer::spawn(file_event_rx, debounced_tx, Duration::from_millis(75));
 
     // Spawn parse pipeline task
     let pipeline_db = pool.clone();
@@ -122,21 +119,16 @@ async fn main() {
 
             // Bootstrap: full re-parse of all .planning/ files
             let planning_path = project_path.join(".planning");
-            if planning_path.exists() {
-                if let Err(e) = pipeline::bootstrap_project(
-                    &project.id,
-                    &planning_path,
-                    &pool,
-                    &broadcast_tx,
-                )
-                .await
-                {
-                    tracing::error!(
-                        project_id = %project.id,
-                        error = %e,
-                        "Failed to bootstrap project during startup reconciliation"
-                    );
-                }
+            if planning_path.exists()
+                && let Err(e) =
+                    pipeline::bootstrap_project(&project.id, &planning_path, &pool, &broadcast_tx)
+                        .await
+            {
+                tracing::error!(
+                    project_id = %project.id,
+                    error = %e,
+                    "Failed to bootstrap project during startup reconciliation"
+                );
             }
 
             // Add file watcher for this project
@@ -203,9 +195,8 @@ async fn main() {
         .route("/api/v1/ws/state", get(ws::ws_handler))
         .nest("/api/v1", api::router())
         .fallback_service(
-            ServeDir::new(&static_dir).not_found_service(
-                ServeFile::new(format!("{}/index.html", static_dir)),
-            ),
+            ServeDir::new(&static_dir)
+                .not_found_service(ServeFile::new(format!("{}/index.html", static_dir))),
         )
         .with_state(state);
 

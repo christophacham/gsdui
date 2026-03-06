@@ -1,3 +1,4 @@
+pub mod config;
 pub mod files;
 pub mod health;
 pub mod history;
@@ -25,6 +26,7 @@ pub fn router() -> Router<Arc<AppState>> {
 fn project_sub_router() -> Router<Arc<AppState>> {
     Router::new()
         .merge(state_api::router())
+        .merge(config::router())
         .nest("/history", history::router())
         .nest("/files", files::router())
 }

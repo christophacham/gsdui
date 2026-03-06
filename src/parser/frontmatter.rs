@@ -50,10 +50,10 @@ pub fn parse_frontmatter<T: DeserializeOwned>(input: &str) -> Result<Document<T>
     let body = if body_start < after_newline.len() {
         let rest = &after_newline[body_start..];
         // Skip the newline after closing ---
-        if rest.starts_with('\n') {
-            &rest[1..]
-        } else if rest.starts_with("\r\n") {
-            &rest[2..]
+        if let Some(stripped) = rest.strip_prefix("\r\n") {
+            stripped
+        } else if let Some(stripped) = rest.strip_prefix('\n') {
+            stripped
         } else {
             rest
         }
@@ -72,7 +72,12 @@ pub fn parse_frontmatter<T: DeserializeOwned>(input: &str) -> Result<Document<T>
 /// Find the position of a closing `---` delimiter that starts at the beginning of a line.
 fn find_closing_delimiter(text: &str) -> Option<usize> {
     // Check if text starts with ---
-    if text.starts_with("---") && (text.len() == 3 || text[3..].starts_with('\n') || text[3..].starts_with("\r\n") || text[3..].starts_with(' ')) {
+    if text.starts_with("---")
+        && (text.len() == 3
+            || text[3..].starts_with('\n')
+            || text[3..].starts_with("\r\n")
+            || text[3..].starts_with(' '))
+    {
         return Some(0);
     }
 
@@ -83,7 +88,11 @@ fn find_closing_delimiter(text: &str) -> Option<usize> {
             let abs_pos = search_from + pos + 1; // position of '---' after the newline
             let after = &text[abs_pos + 3..];
             // Verify it's the end of the line (or end of string)
-            if after.is_empty() || after.starts_with('\n') || after.starts_with("\r\n") || after.starts_with(' ') {
+            if after.is_empty()
+                || after.starts_with('\n')
+                || after.starts_with("\r\n")
+                || after.starts_with(' ')
+            {
                 return Some(abs_pos);
             }
             search_from = abs_pos + 3;

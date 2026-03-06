@@ -248,11 +248,8 @@ async fn test_watcher_detects_and_parses_file_change() {
     .unwrap();
 
     // Spawn debouncer (fast 30ms for test)
-    let _debouncer = watcher::debounce::Debouncer::spawn(
-        file_event_rx,
-        debounced_tx,
-        Duration::from_millis(30),
-    );
+    let _debouncer =
+        watcher::debounce::Debouncer::spawn(file_event_rx, debounced_tx, Duration::from_millis(30));
 
     // Spawn pipeline
     let pipeline_db = pool.clone();
@@ -419,10 +416,7 @@ async fn test_startup_reconciliation() {
     let config = db::schema::get_config_for_project(&pool, &project.id)
         .await
         .unwrap();
-    assert!(
-        config.is_some(),
-        "Reconciliation should parse config.json"
-    );
+    assert!(config.is_some(), "Reconciliation should parse config.json");
 
     // Now modify a file on disk (simulate offline changes)
     let config_path = planning_path.join("config.json");
@@ -532,7 +526,9 @@ async fn test_retention_pruning_deletes_expired() {
     .await
     .unwrap();
     // Resolve it and backdate
-    db::schema::resolve_parse_error(&pool, error.id).await.unwrap();
+    db::schema::resolve_parse_error(&pool, error.id)
+        .await
+        .unwrap();
     sqlx::query("UPDATE parse_errors SET occurred_at = ? WHERE id = ?")
         .bind(old_date)
         .bind(error.id)
@@ -567,11 +563,7 @@ async fn test_retention_pruning_deletes_expired() {
     let runs_after = db::schema::get_runs_for_plan(&pool, &project.id, "01", "02")
         .await
         .unwrap();
-    assert_eq!(
-        runs_after.len(),
-        1,
-        "Recent run should be preserved"
-    );
+    assert_eq!(runs_after.len(), 1, "Recent run should be preserved");
 }
 
 // ---------------------------------------------------------------------------
@@ -594,7 +586,10 @@ async fn test_offline_project_detection() {
 
     // Simulate startup reconciliation check
     let project_path = std::path::Path::new(&project.path);
-    assert!(!project_path.exists(), "Path should not exist for this test");
+    assert!(
+        !project_path.exists(),
+        "Path should not exist for this test"
+    );
 
     // Mark as offline (as startup would do)
     sqlx::query("UPDATE projects SET status = 'offline' WHERE id = ?")

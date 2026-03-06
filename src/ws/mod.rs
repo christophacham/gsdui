@@ -4,7 +4,10 @@ use std::collections::HashMap;
 use std::sync::Arc;
 
 use axum::{
-    extract::{State, WebSocketUpgrade, ws::{Message, WebSocket}},
+    extract::{
+        State, WebSocketUpgrade,
+        ws::{Message, WebSocket},
+    },
     response::Response,
 };
 use futures_util::{SinkExt, StreamExt};
@@ -20,10 +23,7 @@ use messages::{ClientMessage, ProjectState, WsMessage};
 ///
 /// Clients connect to `/api/v1/ws/state` and are upgraded to a WebSocket connection.
 /// After upgrade, they must send a Subscribe message with project IDs.
-pub async fn ws_handler(
-    ws: WebSocketUpgrade,
-    State(state): State<Arc<AppState>>,
-) -> Response {
+pub async fn ws_handler(ws: WebSocketUpgrade, State(state): State<Arc<AppState>>) -> Response {
     ws.on_upgrade(move |socket| handle_socket(socket, state))
 }
 
@@ -253,20 +253,20 @@ async fn wait_for_subscribe(
     let timeout = tokio::time::timeout(std::time::Duration::from_secs(10), ws_rx.next()).await;
 
     match timeout {
-        Ok(Some(Ok(Message::Text(text)))) => {
-            match serde_json::from_str::<ClientMessage>(&text) {
-                Ok(ClientMessage::Subscribe { projects }) => {
-                    if projects.is_empty() {
-                        Err("Subscribe message must include at least one project".to_string())
-                    } else {
-                        Ok(projects)
-                    }
+        Ok(Some(Ok(Message::Text(text)))) => match serde_json::from_str::<ClientMessage>(&text) {
+            Ok(ClientMessage::Subscribe { projects }) => {
+                if projects.is_empty() {
+                    Err("Subscribe message must include at least one project".to_string())
+                } else {
+                    Ok(projects)
                 }
-                Ok(_) => Err("First message must be a subscribe command".to_string()),
-                Err(e) => Err(format!("Invalid message format: {}", e)),
             }
+            Ok(_) => Err("First message must be a subscribe command".to_string()),
+            Err(e) => Err(format!("Invalid message format: {}", e)),
+        },
+        Ok(Some(Ok(_))) => {
+            Err("First message must be a text frame with subscribe command".to_string())
         }
-        Ok(Some(Ok(_))) => Err("First message must be a text frame with subscribe command".to_string()),
         Ok(Some(Err(e))) => Err(format!("WebSocket error: {}", e)),
         Ok(None) => Err("Connection closed before subscribe".to_string()),
         Err(_) => Err("Timed out waiting for subscribe message".to_string()),
@@ -326,8 +326,7 @@ pub async fn build_project_state(
     let mut verifications = HashMap::new();
     for phase in &phases {
         if let Ok(Some(v)) =
-            db::schema::get_verification_for_phase(&state.db, project_id, &phase.phase_number)
-                .await
+            db::schema::get_verification_for_phase(&state.db, project_id, &phase.phase_number).await
         {
             verifications.insert(phase.phase_number.clone(), v);
         }
@@ -388,10 +387,10 @@ fn get_memory_usage() -> u64 {
                 if line.starts_with("VmRSS:") {
                     // Format: "VmRSS:     12345 kB"
                     let parts: Vec<&str> = line.split_whitespace().collect();
-                    if parts.len() >= 2 {
-                        if let Ok(kb) = parts[1].parse::<u64>() {
-                            return kb * 1024; // Convert kB to bytes
-                        }
+                    if parts.len() >= 2
+                        && let Ok(kb) = parts[1].parse::<u64>()
+                    {
+                        return kb * 1024; // Convert kB to bytes
                     }
                 }
             }

@@ -99,18 +99,16 @@ fn parse_phase_entries(content: &str) -> Result<Vec<PhaseEntry>, ParseError> {
     phases.sort_by(|a, b| {
         let a_num: f64 = a.number.parse().unwrap_or(0.0);
         let b_num: f64 = b.number.parse().unwrap_or(0.0);
-        a_num.partial_cmp(&b_num).unwrap_or(std::cmp::Ordering::Equal)
+        a_num
+            .partial_cmp(&b_num)
+            .unwrap_or(std::cmp::Ordering::Equal)
     });
 
     Ok(phases)
 }
 
 /// Parse a single phase section for its metadata.
-fn parse_single_phase(
-    number: &str,
-    name: &str,
-    section: &str,
-) -> Result<PhaseEntry, ParseError> {
+fn parse_single_phase(number: &str, name: &str, section: &str) -> Result<PhaseEntry, ParseError> {
     let goal = extract_bold_field(section, "Goal");
     let depends_on = extract_bold_field(section, "Depends on")
         .map(|d| {
@@ -130,13 +128,12 @@ fn parse_single_phase(
         })
         .unwrap_or_default();
 
-    let plan_count = extract_bold_field(section, "Plans")
-        .and_then(|p| {
-            // Extract just the number from "4 plans" or "TBD"
-            p.split_whitespace()
-                .next()
-                .and_then(|n| n.parse::<i64>().ok())
-        });
+    let plan_count = extract_bold_field(section, "Plans").and_then(|p| {
+        // Extract just the number from "4 plans" or "TBD"
+        p.split_whitespace()
+            .next()
+            .and_then(|n| n.parse::<i64>().ok())
+    });
 
     let plans = parse_plan_checklist(section);
 
@@ -196,18 +193,19 @@ fn parse_plan_checklist(section: &str) -> Vec<PlanListItem> {
             break;
         }
 
-        if in_plans {
-            if let Some(cap) = plan_re.captures(trimmed) {
-                let completed = cap.get(1).map(|m| m.as_str() != " ").unwrap_or(false);
-                let filename_desc = cap.get(2).unwrap().as_str().trim().to_string();
-                let description = cap.get(3).map(|m| m.as_str().trim().to_string()).unwrap_or_default();
+        if in_plans && let Some(cap) = plan_re.captures(trimmed) {
+            let completed = cap.get(1).map(|m| m.as_str() != " ").unwrap_or(false);
+            let filename_desc = cap.get(2).unwrap().as_str().trim().to_string();
+            let description = cap
+                .get(3)
+                .map(|m| m.as_str().trim().to_string())
+                .unwrap_or_default();
 
-                items.push(PlanListItem {
-                    filename: filename_desc,
-                    description,
-                    completed,
-                });
-            }
+            items.push(PlanListItem {
+                filename: filename_desc,
+                description,
+                completed,
+            });
         }
     }
 

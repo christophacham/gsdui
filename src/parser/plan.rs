@@ -1,7 +1,7 @@
 use serde::Deserialize;
 
-use super::frontmatter;
 use super::ParseError;
+use super::frontmatter;
 
 /// Frontmatter fields from a PLAN.md file.
 #[derive(Debug, Clone, Deserialize)]
@@ -99,10 +99,7 @@ mod tests {
         assert_eq!(data.depends_on, vec!["none"]);
         assert!(!data.files_modified.is_empty());
         assert!(data.files_modified.contains(&"src/main.rs".to_string()));
-        assert_eq!(
-            data.requirements,
-            vec!["STATE-11", "STATE-12", "INFRA-01"]
-        );
+        assert_eq!(data.requirements, vec!["STATE-11", "STATE-12", "INFRA-01"]);
     }
 
     #[test]

@@ -33,21 +33,16 @@ async fn get_project_state(
     State(state): State<Arc<AppState>>,
     AxumPath(id): AxumPath<String>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<ErrorResponse>)> {
-    let project_state = ws::build_project_state(&state, &id)
-        .await
-        .map_err(|e| {
-            if e.contains("not found") {
-                (
-                    StatusCode::NOT_FOUND,
-                    Json(ErrorResponse { error: e }),
-                )
-            } else {
-                (
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    Json(ErrorResponse { error: e }),
-                )
-            }
-        })?;
+    let project_state = ws::build_project_state(&state, &id).await.map_err(|e| {
+        if e.contains("not found") {
+            (StatusCode::NOT_FOUND, Json(ErrorResponse { error: e }))
+        } else {
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(ErrorResponse { error: e }),
+            )
+        }
+    })?;
 
     Ok(Json(project_state))
 }
@@ -58,16 +53,14 @@ async fn get_project_phases(
     AxumPath(id): AxumPath<String>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<ErrorResponse>)> {
     // Verify project exists
-    let project = db::schema::get_project(&state.db, &id)
-        .await
-        .map_err(|e| {
-            (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(ErrorResponse {
-                    error: format!("Database error: {}", e),
-                }),
-            )
-        })?;
+    let project = db::schema::get_project(&state.db, &id).await.map_err(|e| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(ErrorResponse {
+                error: format!("Database error: {}", e),
+            }),
+        )
+    })?;
 
     if project.is_none() {
         return Err((
@@ -98,16 +91,14 @@ async fn get_phase_plans(
     AxumPath((id, phase)): AxumPath<(String, String)>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<ErrorResponse>)> {
     // Verify project exists
-    let project = db::schema::get_project(&state.db, &id)
-        .await
-        .map_err(|e| {
-            (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(ErrorResponse {
-                    error: format!("Database error: {}", e),
-                }),
-            )
-        })?;
+    let project = db::schema::get_project(&state.db, &id).await.map_err(|e| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(ErrorResponse {
+                error: format!("Database error: {}", e),
+            }),
+        )
+    })?;
 
     if project.is_none() {
         return Err((
@@ -138,16 +129,14 @@ async fn get_project_errors(
     AxumPath(id): AxumPath<String>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<ErrorResponse>)> {
     // Verify project exists
-    let project = db::schema::get_project(&state.db, &id)
-        .await
-        .map_err(|e| {
-            (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(ErrorResponse {
-                    error: format!("Database error: {}", e),
-                }),
-            )
-        })?;
+    let project = db::schema::get_project(&state.db, &id).await.map_err(|e| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(ErrorResponse {
+                error: format!("Database error: {}", e),
+            }),
+        )
+    })?;
 
     if project.is_none() {
         return Err((

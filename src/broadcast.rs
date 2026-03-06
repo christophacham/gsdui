@@ -27,10 +27,7 @@ impl Broadcaster {
 
     /// Get or create a broadcast channel for a project.
     /// Returns a clone of the Sender.
-    pub async fn get_or_create_channel(
-        &self,
-        project_id: &str,
-    ) -> broadcast::Sender<StateUpdate> {
+    pub async fn get_or_create_channel(&self, project_id: &str) -> broadcast::Sender<StateUpdate> {
         // Try read-only first (fast path)
         {
             let channels = self.channels.read().await;

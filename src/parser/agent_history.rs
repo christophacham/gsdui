@@ -34,7 +34,7 @@ pub fn parse_agent_history(content: &str) -> Result<Vec<AgentSession>, ParseErro
         serde_json::Value::Array(arr) => {
             let sessions: Vec<AgentSession> = arr
                 .into_iter()
-                .map(|v| serde_json::from_value(v))
+                .map(serde_json::from_value)
                 .collect::<Result<Vec<_>, _>>()?;
             Ok(sessions)
         }
@@ -50,7 +50,7 @@ pub fn parse_agent_history(content: &str) -> Result<Vec<AgentSession>, ParseErro
                     let sessions: Vec<AgentSession> = arr
                         .iter()
                         .cloned()
-                        .map(|v| serde_json::from_value(v))
+                        .map(serde_json::from_value)
                         .collect::<Result<Vec<_>, _>>()?;
                     Ok(sessions)
                 }
@@ -84,14 +84,8 @@ mod tests {
         assert_eq!(first.agent_type.as_deref(), Some("planner"));
         assert_eq!(first.phase.as_deref(), Some("01"));
         assert_eq!(first.plan.as_deref(), Some("01"));
-        assert_eq!(
-            first.started_at.as_deref(),
-            Some("2026-03-06T19:00:00Z")
-        );
-        assert_eq!(
-            first.ended_at.as_deref(),
-            Some("2026-03-06T19:10:00Z")
-        );
+        assert_eq!(first.started_at.as_deref(), Some("2026-03-06T19:00:00Z"));
+        assert_eq!(first.ended_at.as_deref(), Some("2026-03-06T19:10:00Z"));
     }
 
     #[test]

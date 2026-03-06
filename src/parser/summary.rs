@@ -1,8 +1,8 @@
 use regex::Regex;
 use serde::Deserialize;
 
-use super::frontmatter;
 use super::ParseError;
+use super::frontmatter;
 
 /// A single commit record parsed from the Task Commits section.
 #[derive(Debug, Clone, PartialEq)]
@@ -150,9 +150,8 @@ fn parse_commit_section(body: &str) -> Vec<CommitRecord> {
     let section = &section[..section_end];
 
     // Pattern: N. **Task N: Name** - `hash` (type)
-    let commit_re = Regex::new(
-        r"(\d+)\.\s+\*\*(.+?)\*\*\s*(?:-|--)\s*`([a-f0-9]+)`\s*\((\w+)\)"
-    ).unwrap();
+    let commit_re =
+        Regex::new(r"(\d+)\.\s+\*\*(.+?)\*\*\s*(?:-|--)\s*`([a-f0-9]+)`\s*\((\w+)\)").unwrap();
 
     let mut commits = Vec::new();
 

@@ -46,15 +46,12 @@ async fn spawn_test_server() -> (String, Arc<AppState>) {
         .route("/api/v1/ws/state", get(ws::ws_handler))
         .nest("/api/v1", api::router())
         .fallback_service(
-            ServeDir::new(&config.static_dir).not_found_service(
-                ServeFile::new(format!("{}/index.html", config.static_dir)),
-            ),
+            ServeDir::new(&config.static_dir)
+                .not_found_service(ServeFile::new(format!("{}/index.html", config.static_dir))),
         )
         .with_state(state);
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
     let addr = listener.local_addr().unwrap();
     let base_url = format!("ws://{}", addr);
 
@@ -321,8 +318,7 @@ async fn test_ws_reconnect_receives_fresh_snapshot() {
 
     // Second connection (reconnect)
     {
-        let (_write, mut read) =
-            connect_and_subscribe(&base_url, vec![project_id.clone()]).await;
+        let (_write, mut read) = connect_and_subscribe(&base_url, vec![project_id.clone()]).await;
 
         // Should receive a fresh snapshot
         let msg = tokio::time::timeout(Duration::from_secs(5), read.next())

@@ -70,6 +70,7 @@ pub async fn delete_project(pool: &SqlitePool, id: &str) -> Result<bool, sqlx::E
 
 // --- Phase State ---
 
+#[allow(clippy::too_many_arguments)]
 pub async fn upsert_phase_state(
     pool: &SqlitePool,
     project_id: &str,
@@ -126,6 +127,7 @@ pub async fn get_phase_states_for_project(
 
 // --- Plan State ---
 
+#[allow(clippy::too_many_arguments)]
 pub async fn upsert_plan_state(
     pool: &SqlitePool,
     project_id: &str,
@@ -207,6 +209,7 @@ pub async fn insert_execution_run(
     .await
 }
 
+#[allow(clippy::too_many_arguments)]
 pub async fn update_execution_run(
     pool: &SqlitePool,
     id: i64,
@@ -296,6 +299,7 @@ pub async fn get_commits_for_run(
 
 // --- Agent Sessions ---
 
+#[allow(clippy::too_many_arguments)]
 pub async fn insert_agent_session(
     pool: &SqlitePool,
     project_id: &str,
@@ -445,12 +449,10 @@ pub async fn get_config_for_project(
     pool: &SqlitePool,
     project_id: &str,
 ) -> Result<Option<ProjectConfig>, sqlx::Error> {
-    sqlx::query_as::<_, ProjectConfig>(
-        "SELECT * FROM project_config WHERE project_id = ?",
-    )
-    .bind(project_id)
-    .fetch_optional(pool)
-    .await
+    sqlx::query_as::<_, ProjectConfig>("SELECT * FROM project_config WHERE project_id = ?")
+        .bind(project_id)
+        .fetch_optional(pool)
+        .await
 }
 
 // --- Filtered queries for REST API ---
@@ -510,32 +512,57 @@ pub async fn get_runs_filtered(
     // Count total
     let count_sql = format!("SELECT COUNT(*) FROM execution_runs WHERE {}", where_clause);
     let mut count_query = sqlx::query_scalar::<_, i64>(&count_sql).bind(project_id);
-    if let Some(ref v) = filters.phase { count_query = count_query.bind(v); }
-    if let Some(ref v) = filters.plan { count_query = count_query.bind(v); }
-    if let Some(ref v) = filters.status { count_query = count_query.bind(v); }
-    if let Some(ref v) = filters.from { count_query = count_query.bind(v); }
-    if let Some(ref v) = filters.to { count_query = count_query.bind(v); }
+    if let Some(ref v) = filters.phase {
+        count_query = count_query.bind(v);
+    }
+    if let Some(ref v) = filters.plan {
+        count_query = count_query.bind(v);
+    }
+    if let Some(ref v) = filters.status {
+        count_query = count_query.bind(v);
+    }
+    if let Some(ref v) = filters.from {
+        count_query = count_query.bind(v);
+    }
+    if let Some(ref v) = filters.to {
+        count_query = count_query.bind(v);
+    }
     let total: i64 = count_query.fetch_one(pool).await?;
 
     // Fetch rows
     let data_sql = format!(
         "SELECT * FROM execution_runs WHERE {} ORDER BY created_at DESC LIMIT ?{} OFFSET ?{}",
-        where_clause, bind_idx, bind_idx + 1
+        where_clause,
+        bind_idx,
+        bind_idx + 1
     );
     let mut data_query = sqlx::query_as::<_, ExecutionRun>(&data_sql).bind(project_id);
-    if let Some(ref v) = filters.phase { data_query = data_query.bind(v); }
-    if let Some(ref v) = filters.plan { data_query = data_query.bind(v); }
-    if let Some(ref v) = filters.status { data_query = data_query.bind(v); }
-    if let Some(ref v) = filters.from { data_query = data_query.bind(v); }
-    if let Some(ref v) = filters.to { data_query = data_query.bind(v); }
+    if let Some(ref v) = filters.phase {
+        data_query = data_query.bind(v);
+    }
+    if let Some(ref v) = filters.plan {
+        data_query = data_query.bind(v);
+    }
+    if let Some(ref v) = filters.status {
+        data_query = data_query.bind(v);
+    }
+    if let Some(ref v) = filters.from {
+        data_query = data_query.bind(v);
+    }
+    if let Some(ref v) = filters.to {
+        data_query = data_query.bind(v);
+    }
     data_query = data_query.bind(filters.limit).bind(filters.offset);
     let runs = data_query.fetch_all(pool).await?;
 
-    Ok((runs, PaginationMeta {
-        total,
-        limit: filters.limit,
-        offset: filters.offset,
-    }))
+    Ok((
+        runs,
+        PaginationMeta {
+            total,
+            limit: filters.limit,
+            offset: filters.offset,
+        },
+    ))
 }
 
 /// Filter parameters for agent sessions.
@@ -581,10 +608,18 @@ pub async fn get_sessions_filtered(
     );
 
     let mut query = sqlx::query_as::<_, AgentSession>(&sql).bind(project_id);
-    if let Some(ref v) = filters.agent_type { query = query.bind(v); }
-    if let Some(ref v) = filters.phase { query = query.bind(v); }
-    if let Some(ref v) = filters.from { query = query.bind(v); }
-    if let Some(ref v) = filters.to { query = query.bind(v); }
+    if let Some(ref v) = filters.agent_type {
+        query = query.bind(v);
+    }
+    if let Some(ref v) = filters.phase {
+        query = query.bind(v);
+    }
+    if let Some(ref v) = filters.from {
+        query = query.bind(v);
+    }
+    if let Some(ref v) = filters.to {
+        query = query.bind(v);
+    }
 
     query.fetch_all(pool).await
 }
@@ -594,12 +629,10 @@ pub async fn get_run_by_id(
     pool: &SqlitePool,
     run_id: i64,
 ) -> Result<Option<ExecutionRun>, sqlx::Error> {
-    sqlx::query_as::<_, ExecutionRun>(
-        "SELECT * FROM execution_runs WHERE id = ?",
-    )
-    .bind(run_id)
-    .fetch_optional(pool)
-    .await
+    sqlx::query_as::<_, ExecutionRun>("SELECT * FROM execution_runs WHERE id = ?")
+        .bind(run_id)
+        .fetch_optional(pool)
+        .await
 }
 
 /// Get all parse errors (active + resolved) count per project.

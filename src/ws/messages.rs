@@ -15,13 +15,11 @@ use crate::watcher::pipeline::StateChange;
 /// Messages sent from server to WebSocket clients.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "type")]
+#[allow(clippy::large_enum_variant)]
 pub enum WsMessage {
     /// Full state snapshot for one project (sent on subscribe)
     #[serde(rename = "snapshot")]
-    Snapshot {
-        project: String,
-        data: ProjectState,
-    },
+    Snapshot { project: String, data: ProjectState },
 
     /// Incremental delta updates for a project
     #[serde(rename = "delta")]

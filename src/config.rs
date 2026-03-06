@@ -24,8 +24,7 @@ impl DaemonConfig {
                 .unwrap_or_else(|_| "0.0.0.0:3000".to_string()),
             database_url: env::var("GSDUI_DATABASE_URL")
                 .unwrap_or_else(|_| "sqlite:data/gsdui.db?mode=rwc".to_string()),
-            static_dir: env::var("GSDUI_STATIC_DIR")
-                .unwrap_or_else(|_| "static".to_string()),
+            static_dir: env::var("GSDUI_STATIC_DIR").unwrap_or_else(|_| "static".to_string()),
         }
     }
 }

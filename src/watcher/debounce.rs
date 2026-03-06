@@ -142,10 +142,7 @@ mod tests {
         let batch = recv_event(&mut rx).await;
         assert_eq!(batch.len(), 1);
         assert_eq!(batch[0].project_id, "project-1");
-        assert_eq!(
-            batch[0].path,
-            PathBuf::from("/test/.planning/STATE.md")
-        );
+        assert_eq!(batch[0].path, PathBuf::from("/test/.planning/STATE.md"));
         assert_eq!(batch[0].kind, FileEventKind::Modify);
     }
 
@@ -157,29 +154,17 @@ mod tests {
         let path = PathBuf::from("/test/.planning/STATE.md");
 
         // Send 3 rapid events for the same file at 0ms, 20ms, 40ms
-        debouncer.handle_event(
-            "project-1".to_string(),
-            path.clone(),
-            FileEventKind::Modify,
-        );
+        debouncer.handle_event("project-1".to_string(), path.clone(), FileEventKind::Modify);
 
         // Advance 20ms (timer resets)
         tokio::time::sleep(Duration::from_millis(20)).await;
 
-        debouncer.handle_event(
-            "project-1".to_string(),
-            path.clone(),
-            FileEventKind::Modify,
-        );
+        debouncer.handle_event("project-1".to_string(), path.clone(), FileEventKind::Modify);
 
         // Advance 20ms (timer resets again)
         tokio::time::sleep(Duration::from_millis(20)).await;
 
-        debouncer.handle_event(
-            "project-1".to_string(),
-            path.clone(),
-            FileEventKind::Create,
-        );
+        debouncer.handle_event("project-1".to_string(), path.clone(), FileEventKind::Create);
 
         // The debounce timer restarts from the last event.
         // After 75ms from the last event, we get a single batch.

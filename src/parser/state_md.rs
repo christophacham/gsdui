@@ -1,8 +1,8 @@
 use regex::Regex;
 use serde::Deserialize;
 
-use super::frontmatter;
 use super::ParseError;
+use super::frontmatter;
 
 /// Progress data extracted from STATE.md frontmatter.
 #[derive(Debug, Clone, Deserialize, PartialEq)]
@@ -102,14 +102,8 @@ mod tests {
         assert_eq!(data.milestone.as_deref(), Some("v1.0"));
         assert_eq!(data.milestone_name.as_deref(), Some("milestone"));
         assert_eq!(data.status.as_deref(), Some("executing"));
-        assert_eq!(
-            data.stopped_at.as_deref(),
-            Some("Completed 01-01-PLAN.md")
-        );
-        assert_eq!(
-            data.last_updated.as_deref(),
-            Some("2026-03-06T19:54:33Z")
-        );
+        assert_eq!(data.stopped_at.as_deref(), Some("Completed 01-01-PLAN.md"));
+        assert_eq!(data.last_updated.as_deref(), Some("2026-03-06T19:54:33Z"));
         assert!(data.last_activity.is_some());
     }
 

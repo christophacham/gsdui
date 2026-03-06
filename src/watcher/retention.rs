@@ -22,7 +22,10 @@ pub async fn run_retention_pruning(
     interval: Option<Duration>,
 ) {
     let interval = interval.unwrap_or(Duration::from_secs(24 * 60 * 60)); // Default: 24 hours
-    info!(interval_secs = interval.as_secs(), "Retention pruning task started");
+    info!(
+        interval_secs = interval.as_secs(),
+        "Retention pruning task started"
+    );
 
     loop {
         tokio::select! {

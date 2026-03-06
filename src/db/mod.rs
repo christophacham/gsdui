@@ -53,7 +53,10 @@ mod tests {
             .fetch_one(&pool)
             .await
             .unwrap();
-        assert_eq!(row.0, "memory", "In-memory DBs report 'memory' for journal_mode, but WAL was set");
+        assert_eq!(
+            row.0, "memory",
+            "In-memory DBs report 'memory' for journal_mode, but WAL was set"
+        );
         // Note: in-memory databases cannot use WAL mode, they always report "memory".
         // On-disk databases will report "wal". The PRAGMA still executes without error.
 
@@ -100,9 +103,10 @@ mod tests {
         let pool = init_pool("sqlite::memory:").await.unwrap();
 
         // Create
-        let project = schema::create_project(&pool, "test-id-1", "Test Project", "/tmp/test-project")
-            .await
-            .unwrap();
+        let project =
+            schema::create_project(&pool, "test-id-1", "Test Project", "/tmp/test-project")
+                .await
+                .unwrap();
         assert_eq!(project.id, "test-id-1");
         assert_eq!(project.name, "Test Project");
         assert_eq!(project.status, "active");
@@ -140,48 +144,89 @@ mod tests {
         let pool = init_pool("sqlite::memory:").await.unwrap();
 
         // Create project first (FK target)
-        schema::create_project(&pool, "proj-1", "Test", "/tmp/test").await.unwrap();
+        schema::create_project(&pool, "proj-1", "Test", "/tmp/test")
+            .await
+            .unwrap();
 
         // Insert phase state
         let phase = schema::upsert_phase_state(
-            &pool, "proj-1", "01", "Backend Foundation",
-            Some("Build backend"), None, "executing", None,
-            Some("[\"STATE-01\"]"), 3, 1,
-        ).await.unwrap();
+            &pool,
+            "proj-1",
+            "01",
+            "Backend Foundation",
+            Some("Build backend"),
+            None,
+            "executing",
+            None,
+            Some("[\"STATE-01\"]"),
+            3,
+            1,
+        )
+        .await
+        .unwrap();
         assert_eq!(phase.phase_number, "01");
         assert_eq!(phase.stage, "executing");
 
         // Insert plan state
         let plan = schema::upsert_plan_state(
-            &pool, "proj-1", "01", "01",
-            Some("Scaffold"), Some(1), None, Some("execute"),
-            "working", None, None,
-        ).await.unwrap();
+            &pool,
+            "proj-1",
+            "01",
+            "01",
+            Some("Scaffold"),
+            Some(1),
+            None,
+            Some("execute"),
+            "working",
+            None,
+            None,
+        )
+        .await
+        .unwrap();
         assert_eq!(plan.plan_number, "01");
         assert_eq!(plan.status, "working");
 
         // Insert execution run
         let run = schema::insert_execution_run(
-            &pool, "proj-1", "01", "01", 1,
-            Some("2026-03-06T12:00:00Z"), Some("in_progress"),
-        ).await.unwrap();
+            &pool,
+            "proj-1",
+            "01",
+            "01",
+            1,
+            Some("2026-03-06T12:00:00Z"),
+            Some("in_progress"),
+        )
+        .await
+        .unwrap();
         assert_eq!(run.run_number, 1);
 
         // Insert commit for the run
         let commit = schema::insert_commit(
-            &pool, run.id, 1, Some("Scaffold project"),
-            Some("abc1234"), Some("feat"),
-        ).await.unwrap();
+            &pool,
+            run.id,
+            1,
+            Some("Scaffold project"),
+            Some("abc1234"),
+            Some("feat"),
+        )
+        .await
+        .unwrap();
         assert_eq!(commit.task_number, 1);
 
         // Verify reads
-        let phases = schema::get_phase_states_for_project(&pool, "proj-1").await.unwrap();
+        let phases = schema::get_phase_states_for_project(&pool, "proj-1")
+            .await
+            .unwrap();
         assert_eq!(phases.len(), 1);
 
-        let plans = schema::get_plan_states_for_phase(&pool, "proj-1", "01").await.unwrap();
+        let plans = schema::get_plan_states_for_phase(&pool, "proj-1", "01")
+            .await
+            .unwrap();
         assert_eq!(plans.len(), 1);
 
-        let runs = schema::get_runs_for_plan(&pool, "proj-1", "01", "01").await.unwrap();
+        let runs = schema::get_runs_for_plan(&pool, "proj-1", "01", "01")
+            .await
+            .unwrap();
         assert_eq!(runs.len(), 1);
 
         let commits = schema::get_commits_for_run(&pool, run.id).await.unwrap();
@@ -194,24 +239,40 @@ mod tests {
     async fn test_unique_constraint_phase_state() {
         let pool = init_pool("sqlite::memory:").await.unwrap();
 
-        schema::create_project(&pool, "proj-1", "Test", "/tmp/test").await.unwrap();
+        schema::create_project(&pool, "proj-1", "Test", "/tmp/test")
+            .await
+            .unwrap();
 
         // First insert
         schema::upsert_phase_state(
-            &pool, "proj-1", "01", "Backend",
-            None, None, "planned", None, None, 0, 0,
-        ).await.unwrap();
+            &pool, "proj-1", "01", "Backend", None, None, "planned", None, None, 0, 0,
+        )
+        .await
+        .unwrap();
 
         // Upsert with same (project_id, phase_number) should update, not fail
         let updated = schema::upsert_phase_state(
-            &pool, "proj-1", "01", "Backend Updated",
-            Some("New goal"), None, "executing", None, None, 3, 1,
-        ).await.unwrap();
+            &pool,
+            "proj-1",
+            "01",
+            "Backend Updated",
+            Some("New goal"),
+            None,
+            "executing",
+            None,
+            None,
+            3,
+            1,
+        )
+        .await
+        .unwrap();
         assert_eq!(updated.phase_name, "Backend Updated");
         assert_eq!(updated.stage, "executing");
 
         // Verify only one row exists
-        let phases = schema::get_phase_states_for_project(&pool, "proj-1").await.unwrap();
+        let phases = schema::get_phase_states_for_project(&pool, "proj-1")
+            .await
+            .unwrap();
         assert_eq!(phases.len(), 1);
 
         pool.close().await;
@@ -222,46 +283,76 @@ mod tests {
         let pool = init_pool("sqlite::memory:").await.unwrap();
 
         // Create project with child rows
-        schema::create_project(&pool, "proj-1", "Test", "/tmp/test").await.unwrap();
+        schema::create_project(&pool, "proj-1", "Test", "/tmp/test")
+            .await
+            .unwrap();
 
         schema::upsert_phase_state(
-            &pool, "proj-1", "01", "Backend",
-            None, None, "planned", None, None, 0, 0,
-        ).await.unwrap();
+            &pool, "proj-1", "01", "Backend", None, None, "planned", None, None, 0, 0,
+        )
+        .await
+        .unwrap();
 
         schema::upsert_plan_state(
-            &pool, "proj-1", "01", "01",
-            Some("Plan 1"), None, None, None, "pending", None, None,
-        ).await.unwrap();
+            &pool,
+            "proj-1",
+            "01",
+            "01",
+            Some("Plan 1"),
+            None,
+            None,
+            None,
+            "pending",
+            None,
+            None,
+        )
+        .await
+        .unwrap();
 
-        let run = schema::insert_execution_run(
-            &pool, "proj-1", "01", "01", 1, None, None,
-        ).await.unwrap();
+        let run = schema::insert_execution_run(&pool, "proj-1", "01", "01", 1, None, None)
+            .await
+            .unwrap();
 
-        schema::insert_commit(
-            &pool, run.id, 1, Some("Task 1"), Some("abc"), Some("feat"),
-        ).await.unwrap();
+        schema::insert_commit(&pool, run.id, 1, Some("Task 1"), Some("abc"), Some("feat"))
+            .await
+            .unwrap();
 
         schema::insert_agent_session(
-            &pool, "proj-1", Some("agent-1"), Some("claude"),
-            Some("01"), Some("01"), None, None,
-        ).await.unwrap();
+            &pool,
+            "proj-1",
+            Some("agent-1"),
+            Some("claude"),
+            Some("01"),
+            Some("01"),
+            None,
+            None,
+        )
+        .await
+        .unwrap();
 
         // Delete the project -- all child rows should cascade
         let deleted = schema::delete_project(&pool, "proj-1").await.unwrap();
         assert!(deleted);
 
         // Verify all child tables are empty
-        let phases = schema::get_phase_states_for_project(&pool, "proj-1").await.unwrap();
+        let phases = schema::get_phase_states_for_project(&pool, "proj-1")
+            .await
+            .unwrap();
         assert_eq!(phases.len(), 0);
 
-        let plans = schema::get_plan_states_for_phase(&pool, "proj-1", "01").await.unwrap();
+        let plans = schema::get_plan_states_for_phase(&pool, "proj-1", "01")
+            .await
+            .unwrap();
         assert_eq!(plans.len(), 0);
 
-        let runs = schema::get_runs_for_plan(&pool, "proj-1", "01", "01").await.unwrap();
+        let runs = schema::get_runs_for_plan(&pool, "proj-1", "01", "01")
+            .await
+            .unwrap();
         assert_eq!(runs.len(), 0);
 
-        let sessions = schema::get_sessions_for_project(&pool, "proj-1").await.unwrap();
+        let sessions = schema::get_sessions_for_project(&pool, "proj-1")
+            .await
+            .unwrap();
         assert_eq!(sessions.len(), 0);
 
         pool.close().await;
@@ -271,26 +362,39 @@ mod tests {
     async fn test_verification_and_parse_errors() {
         let pool = init_pool("sqlite::memory:").await.unwrap();
 
-        schema::create_project(&pool, "proj-1", "Test", "/tmp/test").await.unwrap();
+        schema::create_project(&pool, "proj-1", "Test", "/tmp/test")
+            .await
+            .unwrap();
 
         // Upsert verification result
         let v = schema::upsert_verification(
-            &pool, "proj-1", "01", "passed", Some("5/5"), Some("2026-03-06"),
-        ).await.unwrap();
+            &pool,
+            "proj-1",
+            "01",
+            "passed",
+            Some("5/5"),
+            Some("2026-03-06"),
+        )
+        .await
+        .unwrap();
         assert_eq!(v.status, "passed");
 
         // Read it back
-        let found = schema::get_verification_for_phase(&pool, "proj-1", "01").await.unwrap();
+        let found = schema::get_verification_for_phase(&pool, "proj-1", "01")
+            .await
+            .unwrap();
         assert!(found.is_some());
 
         // Insert parse error
-        let err = schema::insert_parse_error(
-            &pool, "proj-1", "STATE.md", "Invalid YAML", "error",
-        ).await.unwrap();
+        let err = schema::insert_parse_error(&pool, "proj-1", "STATE.md", "Invalid YAML", "error")
+            .await
+            .unwrap();
         assert_eq!(err.severity, "error");
 
         // Get active errors
-        let errors = schema::get_active_errors_for_project(&pool, "proj-1").await.unwrap();
+        let errors = schema::get_active_errors_for_project(&pool, "proj-1")
+            .await
+            .unwrap();
         assert_eq!(errors.len(), 1);
 
         // Resolve error
@@ -298,7 +402,9 @@ mod tests {
         assert!(resolved);
 
         // No active errors now
-        let errors = schema::get_active_errors_for_project(&pool, "proj-1").await.unwrap();
+        let errors = schema::get_active_errors_for_project(&pool, "proj-1")
+            .await
+            .unwrap();
         assert_eq!(errors.len(), 0);
 
         pool.close().await;
@@ -308,23 +414,27 @@ mod tests {
     async fn test_project_config() {
         let pool = init_pool("sqlite::memory:").await.unwrap();
 
-        schema::create_project(&pool, "proj-1", "Test", "/tmp/test").await.unwrap();
+        schema::create_project(&pool, "proj-1", "Test", "/tmp/test")
+            .await
+            .unwrap();
 
         // Upsert config
-        let config = schema::upsert_config(
-            &pool, "proj-1", "{\"mode\":\"yolo\"}",
-        ).await.unwrap();
+        let config = schema::upsert_config(&pool, "proj-1", "{\"mode\":\"yolo\"}")
+            .await
+            .unwrap();
         assert_eq!(config.config_json, "{\"mode\":\"yolo\"}");
 
         // Read it back
-        let found = schema::get_config_for_project(&pool, "proj-1").await.unwrap();
+        let found = schema::get_config_for_project(&pool, "proj-1")
+            .await
+            .unwrap();
         assert!(found.is_some());
         assert_eq!(found.unwrap().config_json, "{\"mode\":\"yolo\"}");
 
         // Update
-        let updated = schema::upsert_config(
-            &pool, "proj-1", "{\"mode\":\"careful\"}",
-        ).await.unwrap();
+        let updated = schema::upsert_config(&pool, "proj-1", "{\"mode\":\"careful\"}")
+            .await
+            .unwrap();
         assert_eq!(updated.config_json, "{\"mode\":\"careful\"}");
 
         pool.close().await;

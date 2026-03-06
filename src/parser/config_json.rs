@@ -89,7 +89,10 @@ mod tests {
     fn test_parse_config_json_workflow() {
         let config = parse_config_json(&fixture()).unwrap();
         let workflow = config.workflow.expect("workflow should exist");
-        assert_eq!(workflow.get("research").and_then(|v| v.as_bool()), Some(true));
+        assert_eq!(
+            workflow.get("research").and_then(|v| v.as_bool()),
+            Some(true)
+        );
         assert_eq!(
             workflow.get("auto_advance").and_then(|v| v.as_bool()),
             Some(true)
@@ -101,9 +104,7 @@ mod tests {
         let config = parse_config_json(&fixture()).unwrap();
         let planning = config.planning.expect("planning should exist");
         assert_eq!(
-            planning
-                .get("max_plans_per_phase")
-                .and_then(|v| v.as_i64()),
+            planning.get("max_plans_per_phase").and_then(|v| v.as_i64()),
             Some(5)
         );
 

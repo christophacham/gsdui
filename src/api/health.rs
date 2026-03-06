@@ -37,9 +37,7 @@ struct ParseErrorCounts {
     resolved: i64,
 }
 
-async fn health_check(
-    State(state): State<Arc<AppState>>,
-) -> Json<HealthResponse> {
+async fn health_check(State(state): State<Arc<AppState>>) -> Json<HealthResponse> {
     let uptime = state.start_time.elapsed().as_secs();
 
     // Query SQLite database size (page_count * page_size)
@@ -73,10 +71,8 @@ async fn health_check(
             if let Ok((active, resolved)) =
                 db::schema::get_parse_error_counts(&state.db, &project.id).await
             {
-                parse_error_counts.insert(
-                    project.id.clone(),
-                    ParseErrorCounts { active, resolved },
-                );
+                parse_error_counts
+                    .insert(project.id.clone(), ParseErrorCounts { active, resolved });
             }
         }
     }
@@ -101,10 +97,10 @@ fn get_memory_usage() -> u64 {
             for line in status.lines() {
                 if line.starts_with("VmRSS:") {
                     let parts: Vec<&str> = line.split_whitespace().collect();
-                    if parts.len() >= 2 {
-                        if let Ok(kb) = parts[1].parse::<u64>() {
-                            return kb * 1024;
-                        }
+                    if parts.len() >= 2
+                        && let Ok(kb) = parts[1].parse::<u64>()
+                    {
+                        return kb * 1024;
                     }
                 }
             }

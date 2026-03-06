@@ -1,7 +1,7 @@
 use serde::Deserialize;
 
-use super::frontmatter;
 use super::ParseError;
+use super::frontmatter;
 
 /// Verification status values for a phase.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -79,10 +79,8 @@ mod tests {
     use super::*;
 
     fn fixture() -> String {
-        std::fs::read_to_string(
-            "tests/fixtures/planning/phases/01-test-phase/01-VERIFICATION.md",
-        )
-        .expect("VERIFICATION.md fixture should exist")
+        std::fs::read_to_string("tests/fixtures/planning/phases/01-test-phase/01-VERIFICATION.md")
+            .expect("VERIFICATION.md fixture should exist")
     }
 
     #[test]
@@ -91,10 +89,7 @@ mod tests {
         assert_eq!(data.phase.as_deref(), Some("01-backend-foundation"));
         assert_eq!(data.status, VerificationStatus::Passed);
         assert_eq!(data.score.as_deref(), Some("5/5"));
-        assert_eq!(
-            data.verified_at.as_deref(),
-            Some("2026-03-06T20:15:00Z")
-        );
+        assert_eq!(data.verified_at.as_deref(), Some("2026-03-06T20:15:00Z"));
     }
 
     #[test]

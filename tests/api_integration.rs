@@ -38,15 +38,12 @@ async fn spawn_test_server() -> (String, Arc<AppState>) {
     let app = Router::new()
         .nest("/api/v1", api::router())
         .fallback_service(
-            ServeDir::new(&config.static_dir).not_found_service(
-                ServeFile::new(format!("{}/index.html", config.static_dir)),
-            ),
+            ServeDir::new(&config.static_dir)
+                .not_found_service(ServeFile::new(format!("{}/index.html", config.static_dir))),
         )
         .with_state(state);
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
     let addr = listener.local_addr().unwrap();
     let base_url = format!("http://{}", addr);
 
@@ -216,11 +213,7 @@ async fn test_static_file_serving() {
     let (base_url, _state) = spawn_test_server().await;
     let client = reqwest::Client::new();
 
-    let resp = client
-        .get(format!("{}/", base_url))
-        .send()
-        .await
-        .unwrap();
+    let resp = client.get(format!("{}/", base_url)).send().await.unwrap();
     assert_eq!(resp.status(), StatusCode::OK);
 
     let body = resp.text().await.unwrap();
@@ -356,10 +349,7 @@ async fn test_state_endpoint_returns_full_state() {
     let project_id = setup_project_with_data(&state).await;
 
     let resp = client
-        .get(format!(
-            "{}/api/v1/projects/{}/state",
-            base_url, project_id
-        ))
+        .get(format!("{}/api/v1/projects/{}/state", base_url, project_id))
         .send()
         .await
         .unwrap();
@@ -380,10 +370,7 @@ async fn test_state_endpoint_404_for_unknown_project() {
     let client = reqwest::Client::new();
 
     let resp = client
-        .get(format!(
-            "{}/api/v1/projects/nonexistent/state",
-            base_url
-        ))
+        .get(format!("{}/api/v1/projects/nonexistent/state", base_url))
         .send()
         .await
         .unwrap();
@@ -575,9 +562,16 @@ async fn test_history_run_commits() {
     let run_id = runs[0].id;
 
     // Insert a commit
-    db::schema::insert_commit(&state.db, run_id, 1, Some("scaffold"), Some("abc1234"), Some("feat"))
-        .await
-        .unwrap();
+    db::schema::insert_commit(
+        &state.db,
+        run_id,
+        1,
+        Some("scaffold"),
+        Some("abc1234"),
+        Some("feat"),
+    )
+    .await
+    .unwrap();
 
     let resp = client
         .get(format!(
@@ -688,7 +682,12 @@ async fn test_files_endpoint_returns_markdown() {
         .unwrap();
     assert_eq!(resp.status(), StatusCode::OK);
 
-    let content_type = resp.headers().get("content-type").unwrap().to_str().unwrap();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .unwrap()
+        .to_str()
+        .unwrap();
     assert!(
         content_type.contains("text/markdown"),
         "Should return text/markdown, got {}",
@@ -707,11 +706,7 @@ async fn test_files_endpoint_returns_json() {
     let tmp = tempfile::tempdir().unwrap();
     let planning_dir = tmp.path().join(".planning");
     std::fs::create_dir_all(&planning_dir).unwrap();
-    std::fs::write(
-        planning_dir.join("config.json"),
-        r#"{"mode": "yolo"}"#,
-    )
-    .unwrap();
+    std::fs::write(planning_dir.join("config.json"), r#"{"mode": "yolo"}"#).unwrap();
 
     let project_id = "json-test-project";
     db::schema::create_project(
@@ -733,7 +728,12 @@ async fn test_files_endpoint_returns_json() {
         .unwrap();
     assert_eq!(resp.status(), StatusCode::OK);
 
-    let content_type = resp.headers().get("content-type").unwrap().to_str().unwrap();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .unwrap()
+        .to_str()
+        .unwrap();
     assert!(
         content_type.contains("application/json"),
         "Should return application/json, got {}",
@@ -747,11 +747,7 @@ async fn test_files_endpoint_nested_path() {
     let client = reqwest::Client::new();
 
     let tmp = tempfile::tempdir().unwrap();
-    let phase_dir = tmp
-        .path()
-        .join(".planning")
-        .join("phases")
-        .join("01-test");
+    let phase_dir = tmp.path().join(".planning").join("phases").join("01-test");
     std::fs::create_dir_all(&phase_dir).unwrap();
     std::fs::write(
         phase_dir.join("01-01-PLAN.md"),
