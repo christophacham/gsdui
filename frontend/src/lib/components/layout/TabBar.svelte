@@ -37,9 +37,9 @@
 <style>
 	.tab-bar {
 		display: flex;
+		flex: 1;
 		gap: 0;
 		background: var(--bg-surface);
-		border-bottom: 1px solid var(--border-subtle);
 		padding: 0 var(--space-4);
 	}
 

@@ -9,6 +9,7 @@
 	import { projectStore } from '$lib/stores/project.svelte.js';
 	import StageRail from './StageRail.svelte';
 	import WaveContainer from './WaveContainer.svelte';
+	import AgentRoutingPanel from '$lib/components/routing/AgentRoutingPanel.svelte';
 	import Skeleton from '$lib/components/shared/Skeleton.svelte';
 
 	interface Props {
@@ -86,6 +87,12 @@
 				</div>
 			{/if}
 		</div>
+
+		{#if plans.length > 0}
+			<div class="routing-section">
+				<AgentRoutingPanel {phaseNumber} {plans} {projectId} />
+			</div>
+		{/if}
 	</div>
 {/if}
 
@@ -169,5 +176,9 @@
 	.stage-hint {
 		font-size: var(--text-xs);
 		font-style: italic;
+	}
+
+	.routing-section {
+		margin-top: var(--space-4);
 	}
 </style>
