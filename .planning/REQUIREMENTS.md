@@ -18,7 +18,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **PIPE-07**: Phase chips show decimal phase numbers (2.1, 2.2) sorted numerically
 - [x] **PIPE-08**: Phases group by milestone when multiple milestones exist, with completed milestones collapsible
 - [x] **PIPE-09**: Dependency arrows show between plans within wave visualization
-- [ ] **PIPE-10**: Agent routing configuration UI with project default → stage override → plan override hierarchy
+- [x] **PIPE-10**: Agent routing configuration UI with project default → stage override → plan override hierarchy
 - [x] **PIPE-11**: Pipeline updates in real-time via WebSocket without page refresh
 - [x] **PIPE-12**: Duration and timing display on phase chips and plan cards
 
@@ -129,7 +129,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PIPE-07 | Phase 2 | Complete |
 | PIPE-08 | Phase 2 | Complete |
 | PIPE-09 | Phase 2 | Complete |
-| PIPE-10 | Phase 2 | Pending |
+| PIPE-10 | Phase 2 | Complete |
 | PIPE-11 | Phase 2 | Complete |
 | PIPE-12 | Phase 2 | Complete |
 | TERM-01 | Phase 3 | Pending |

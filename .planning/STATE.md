@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 02-03 Wave swim lanes and plan cards
-last_updated: "2026-03-06T22:30:31Z"
-last_activity: 2026-03-06 -- Plan 02-03 executed (wave lanes, plan cards, dependency arrows, agent badges, file viewers)
+stopped_at: Completed 02-04-PLAN.md
+last_updated: "2026-03-06T22:46:39.670Z"
+last_activity: 2026-03-06 -- Plan 02-04 executed (agent routing cascade, config endpoint, settings panel)
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 12
-  completed_plans: 7
-  percent: 58
+  completed_plans: 8
+  percent: 67
 ---
 
 # Project State
@@ -21,34 +21,34 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-06)
 
 **Core value:** Users can see what GSD is doing across all their projects in real-time and interact with running agent sessions from the browser
-**Current focus:** Phase 2: Pipeline Dashboard
+**Current focus:** Phase 2 complete; next: Phase 3 (Terminal) or Phase 4 (Multi-user)
 
 ## Current Position
 
-Phase: 2 of 4 (Pipeline Dashboard)
-Plan: 3 of 4 in current phase
-Status: In Progress
-Last activity: 2026-03-06 -- Plan 02-03 executed (wave lanes, plan cards, dependency arrows, agent badges, file viewers)
+Phase: 2 of 4 (Pipeline Dashboard) -- COMPLETE
+Plan: 4 of 4 in current phase
+Status: Phase Complete
+Last activity: 2026-03-06 -- Plan 02-04 executed (agent routing cascade, config endpoint, settings panel)
 
-Progress: [*****░░░░░] 58%
+Progress: [******░░░░] 67%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
+- Total plans completed: 8
 - Average duration: 8.9 min
-- Total execution time: 1.03 hours
+- Total execution time: 1.20 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1 - Backend Foundation | 4/4 | 42 min | 10.5 min |
-| 2 - Pipeline Dashboard | 3/4 | 21 min | 7.0 min |
+| 2 - Pipeline Dashboard | 4/4 | 31 min | 7.8 min |
 
 **Recent Trend:**
-- Last 5 plans: 14, 11, 10, 4, 7 min
-- Trend: accelerating
+- Last 5 plans: 11, 10, 4, 7, 10 min
+- Trend: stable
 
 *Updated after each plan completion*
 
@@ -88,6 +88,10 @@ Recent decisions affecting current work:
 - 02-03: color-mix() CSS for AgentBadge backgrounds (15% agent color tint)
 - 02-03: MutationObserver + ResizeObserver for dependency arrow auto-recalculation
 - 02-03: Wave lanes only render when phase stage is planned_ready or later
+- 02-04: Inline toast for routing feedback (simpler than importing svelte-5-french-toast for single use)
+- 02-04: Config PUT writes to filesystem; file watcher detects change and broadcasts delta
+- 02-04: SettingsPanel uses slide-out panel pattern with fixed backdrop
+- 02-04: TabBar border-bottom moved to parent tab-row container for gear icon layout
 
 ### Pending Todos
 
@@ -101,6 +105,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T22:30:31Z
-Stopped at: Completed 02-03-PLAN.md
-Resume file: .planning/phases/02-pipeline-dashboard/02-03-SUMMARY.md
+Last session: 2026-03-06T22:45:09Z
+Stopped at: Completed 02-04-PLAN.md -- Phase 2 complete
+Resume file: .planning/phases/02-pipeline-dashboard/02-04-SUMMARY.md
