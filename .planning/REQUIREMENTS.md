@@ -46,15 +46,15 @@ Requirements for initial release. Each maps to roadmap phases.
 ### State Pipeline
 
 - [ ] **STATE-01**: Daemon watches `.planning/` directories recursively via inotify with debouncing (50-100ms)
-- [ ] **STATE-02**: Parser extracts state from STATE.md frontmatter (status, progress, milestone, timestamps)
-- [ ] **STATE-03**: Parser extracts phase list from ROADMAP.md (names, goals, dependencies, completion)
-- [ ] **STATE-04**: Parser extracts plan metadata from PLAN.md frontmatter (wave, depends_on, type, requirements)
-- [ ] **STATE-05**: Parser extracts completion data from SUMMARY.md frontmatter (duration, key-files, requirements-completed)
-- [ ] **STATE-06**: Parser extracts commit counts from SUMMARY.md body (Task Commits section)
-- [ ] **STATE-07**: Parser derives stage per phase from file presence (CONTEXT.md, RESEARCH.md, PLAN.md, SUMMARY.md, VERIFICATION.md)
-- [ ] **STATE-08**: Parser extracts verification status from VERIFICATION.md frontmatter (passed/gaps_found/human_needed, score)
-- [ ] **STATE-09**: Parser reads config.json for workflow settings and agent routing defaults
-- [ ] **STATE-10**: Parser reads agent-history.json for agent execution timeline
+- [x] **STATE-02**: Parser extracts state from STATE.md frontmatter (status, progress, milestone, timestamps)
+- [x] **STATE-03**: Parser extracts phase list from ROADMAP.md (names, goals, dependencies, completion)
+- [x] **STATE-04**: Parser extracts plan metadata from PLAN.md frontmatter (wave, depends_on, type, requirements)
+- [x] **STATE-05**: Parser extracts completion data from SUMMARY.md frontmatter (duration, key-files, requirements-completed)
+- [x] **STATE-06**: Parser extracts commit counts from SUMMARY.md body (Task Commits section)
+- [x] **STATE-07**: Parser derives stage per phase from file presence (CONTEXT.md, RESEARCH.md, PLAN.md, SUMMARY.md, VERIFICATION.md)
+- [x] **STATE-08**: Parser extracts verification status from VERIFICATION.md frontmatter (passed/gaps_found/human_needed, score)
+- [x] **STATE-09**: Parser reads config.json for workflow settings and agent routing defaults
+- [x] **STATE-10**: Parser reads agent-history.json for agent execution timeline
 - [x] **STATE-11**: SQLite database caches current parsed state for fast queries and page loads
 - [x] **STATE-12**: Database stores historical execution metrics (durations, timelines) that persist across file changes
 - [ ] **STATE-13**: WebSocket endpoint pushes state updates with snapshot + delta protocol
@@ -148,15 +148,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SYS-04 | Phase 4 | Pending |
 | SYS-05 | Phase 4 | Pending |
 | STATE-01 | Phase 1 | Pending |
-| STATE-02 | Phase 1 | Pending |
-| STATE-03 | Phase 1 | Pending |
-| STATE-04 | Phase 1 | Pending |
-| STATE-05 | Phase 1 | Pending |
-| STATE-06 | Phase 1 | Pending |
-| STATE-07 | Phase 1 | Pending |
-| STATE-08 | Phase 1 | Pending |
-| STATE-09 | Phase 1 | Pending |
-| STATE-10 | Phase 1 | Pending |
+| STATE-02 | Phase 1 | Complete |
+| STATE-03 | Phase 1 | Complete |
+| STATE-04 | Phase 1 | Complete |
+| STATE-05 | Phase 1 | Complete |
+| STATE-06 | Phase 1 | Complete |
+| STATE-07 | Phase 1 | Complete |
+| STATE-08 | Phase 1 | Complete |
+| STATE-09 | Phase 1 | Complete |
+| STATE-10 | Phase 1 | Complete |
 | STATE-11 | Phase 1 | Complete |
 | STATE-12 | Phase 1 | Complete |
 | STATE-13 | Phase 1 | Pending |

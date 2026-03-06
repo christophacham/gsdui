@@ -33,7 +33,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md -- Rust project scaffold, Cargo.toml, SQLite schema, database layer, project CRUD REST API, health endpoint
-- [ ] 01-02-PLAN.md -- GSD state file parsers (frontmatter extractor, 7 file-type parsers, stage derivation) with TDD
+- [x] 01-02-PLAN.md -- GSD state file parsers (frontmatter extractor, 7 file-type parsers, stage derivation) with TDD
 - [ ] 01-03-PLAN.md -- File watcher with custom per-file debouncer, parse pipeline connecting watcher to parsers to database
 - [ ] 01-04-PLAN.md -- WebSocket state endpoint (snapshot + delta), broadcaster, REST API for state/history/files
 
@@ -94,7 +94,7 @@ Note: Phase 3 depends only on Phase 1, so it can begin after Phase 1 completes (
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Backend Foundation and State Pipeline | 1/4 | In Progress | - |
+| 1. Backend Foundation and State Pipeline | 2/4 | In Progress | - |
 | 2. Pipeline Dashboard | 0/3 | Not started | - |
 | 3. Interactive Terminal System | 0/2 | Not started | - |
 | 4. Multi-User, System Monitoring, and Production | 0/2 | Not started | - |
