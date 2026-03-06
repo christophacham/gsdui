@@ -57,9 +57,9 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **STATE-10**: Parser reads agent-history.json for agent execution timeline
 - [x] **STATE-11**: SQLite database caches current parsed state for fast queries and page loads
 - [x] **STATE-12**: Database stores historical execution metrics (durations, timelines) that persist across file changes
-- [ ] **STATE-13**: WebSocket endpoint pushes state updates with snapshot + delta protocol
-- [ ] **STATE-14**: WebSocket reconnection restores full state via snapshot (no stale UI after network blip)
-- [ ] **STATE-15**: REST API serves project list, current state, and historical metrics
+- [x] **STATE-13**: WebSocket endpoint pushes state updates with snapshot + delta protocol
+- [x] **STATE-14**: WebSocket reconnection restores full state via snapshot (no stale UI after network blip)
+- [x] **STATE-15**: REST API serves project list, current state, and historical metrics
 
 ### Infrastructure
 
@@ -159,9 +159,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | STATE-10 | Phase 1 | Complete |
 | STATE-11 | Phase 1 | Complete |
 | STATE-12 | Phase 1 | Complete |
-| STATE-13 | Phase 1 | Pending |
-| STATE-14 | Phase 1 | Pending |
-| STATE-15 | Phase 1 | Pending |
+| STATE-13 | Phase 1 | Complete |
+| STATE-14 | Phase 1 | Complete |
+| STATE-15 | Phase 1 | Complete |
 | INFRA-01 | Phase 1 | Complete |
 | INFRA-02 | Phase 4 | Pending |
 | INFRA-03 | Phase 4 | Pending |

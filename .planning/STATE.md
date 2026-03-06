@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-03-06T20:24:26Z"
-last_activity: 2026-03-06 -- Plan 01-03 executed (file watcher, parse pipeline, retention pruning, 105 tests)
+stopped_at: Completed 01-04-PLAN.md (Phase 1 complete)
+last_updated: "2026-03-06T20:40:12Z"
+last_activity: 2026-03-06 -- Plan 01-04 executed (WebSocket + REST API, per-project broadcaster, 134 tests)
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 11
-  completed_plans: 3
-  percent: 27
+  completed_plans: 4
+  percent: 36
 ---
 
 # Project State
@@ -26,27 +26,27 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 ## Current Position
 
 Phase: 1 of 4 (Backend Foundation and State Pipeline)
-Plan: 3 of 4 in current phase
-Status: Executing
-Last activity: 2026-03-06 -- Plan 01-03 executed (file watcher, parse pipeline, retention pruning, 105 tests)
+Plan: 4 of 4 in current phase
+Status: Phase 1 Complete
+Last activity: 2026-03-06 -- Plan 01-04 executed (WebSocket + REST API, per-project broadcaster, 134 tests)
 
-Progress: [***░░░░░░░] 27%
+Progress: [****░░░░░░] 36%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 10.3 min
-- Total execution time: 0.52 hours
+- Total plans completed: 4
+- Average duration: 10.5 min
+- Total execution time: 0.70 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 - Backend Foundation | 3/4 | 31 min | 10.3 min |
+| 1 - Backend Foundation | 4/4 | 42 min | 10.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 9, 8, 14 min
+- Last 5 plans: 9, 8, 14, 11 min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -71,6 +71,10 @@ Recent decisions affecting current work:
 - 01-03: Phase number normalization (ROADMAP "1" -> filesystem "01") for consistent DB keys
 - 01-03: bootstrap_project reusable for both registration and startup reconciliation
 - 01-03: Retention pruning only deletes resolved parse errors (unresolved kept regardless of age)
+- 01-04: Per-project Broadcaster with RwLock<HashMap> for WebSocket subscription channels
+- 01-04: WebSocket requires Subscribe as first message within 10-second timeout
+- 01-04: build_project_state() shared between WebSocket snapshot and REST /state endpoint (DRY)
+- 01-04: Dual path traversal prevention: string check + canonicalize comparison
 
 ### Pending Todos
 
@@ -84,6 +88,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T20:24:26Z
-Stopped at: Completed 01-03-PLAN.md
-Resume file: .planning/phases/01-backend-foundation-and-state-pipeline/01-03-SUMMARY.md
+Last session: 2026-03-06T20:40:12Z
+Stopped at: Completed 01-04-PLAN.md (Phase 1 complete)
+Resume file: .planning/phases/01-backend-foundation-and-state-pipeline/01-04-SUMMARY.md
