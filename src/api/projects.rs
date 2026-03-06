@@ -112,6 +112,48 @@ async fn create_project(
             }
         })?;
 
+    // Trigger initial full parse via bootstrap_project
+    let planning_dir_path = planning_dir.clone();
+    let project_id = project.id.clone();
+    let db = state.db.clone();
+    let broadcast_tx = state.broadcast_tx.clone();
+    let file_event_tx = state.file_event_tx.clone();
+
+    tokio::spawn(async move {
+        // Bootstrap: full re-parse of all .planning/ files
+        if let Err(e) = crate::watcher::pipeline::bootstrap_project(
+            &project_id,
+            &planning_dir_path,
+            &db,
+            &broadcast_tx,
+        )
+        .await
+        {
+            tracing::error!(
+                project_id = %project_id,
+                error = %e,
+                "Failed to bootstrap newly registered project"
+            );
+        }
+
+        // Add a file watcher (requires creating a temporary watcher)
+        // Note: In the full system, the file watcher instance is managed centrally.
+        // Here we send a notification event so the watcher can be added in the main loop.
+        // For now, we create a dedicated watcher for this project.
+        let project_path = planning_dir_path.parent().unwrap_or(&planning_dir_path);
+        let mut watcher = crate::watcher::FileWatcher::new(file_event_tx);
+        if let Err(e) = watcher.watch_project(&project_id, project_path) {
+            tracing::error!(
+                project_id = %project_id,
+                error = %e,
+                "Failed to start file watcher for new project"
+            );
+        }
+        // Keep the watcher alive by leaking it (it will be managed by the runtime)
+        // In production, this would be stored in a shared registry
+        std::mem::forget(watcher);
+    });
+
     Ok((StatusCode::CREATED, Json(project)))
 }
 

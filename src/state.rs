@@ -1,7 +1,10 @@
 use sqlx::SqlitePool;
 use std::time::Instant;
+use tokio::sync::{broadcast, mpsc};
 
 use crate::config::DaemonConfig;
+use crate::watcher::FileEvent;
+use crate::watcher::pipeline::StateUpdate;
 
 /// Shared application state passed to all Axum handlers via Arc<AppState>.
 pub struct AppState {
@@ -11,7 +14,8 @@ pub struct AppState {
     pub config: DaemonConfig,
     /// Server start time for uptime calculation
     pub start_time: Instant,
-    // Future plans will add:
-    // pub broadcast: Broadcaster,
-    // pub watcher_handle: ...
+    /// Broadcast channel for real-time state updates (pipeline -> WebSocket clients)
+    pub broadcast_tx: broadcast::Sender<StateUpdate>,
+    /// Channel for sending raw file events to the watcher (for dynamic watch management)
+    pub file_event_tx: mpsc::Sender<FileEvent>,
 }

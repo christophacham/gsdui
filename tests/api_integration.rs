@@ -7,6 +7,7 @@ use gsdui::config::DaemonConfig;
 use gsdui::db;
 use gsdui::state::AppState;
 use reqwest::StatusCode;
+use tokio::sync::{broadcast, mpsc};
 use tower_http::services::{ServeDir, ServeFile};
 
 /// Spin up a test server on a random port with an in-memory SQLite database.
@@ -20,10 +21,15 @@ async fn spawn_test_server() -> String {
         static_dir: "static".to_string(),
     };
 
+    let (broadcast_tx, _rx) = broadcast::channel(64);
+    let (file_event_tx, _file_event_rx) = mpsc::channel(256);
+
     let state = Arc::new(AppState {
         db: pool,
         config: config.clone(),
         start_time: Instant::now(),
+        broadcast_tx,
+        file_event_tx,
     });
 
     let app = Router::new()
