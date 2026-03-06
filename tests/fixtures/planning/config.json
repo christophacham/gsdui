@@ -1,0 +1,27 @@
+{
+  "mode": "yolo",
+  "granularity": "coarse",
+  "parallelization": true,
+  "commit_docs": true,
+  "model_profile": "quality",
+  "workflow": {
+    "research": true,
+    "plan_check": true,
+    "verifier": true,
+    "nyquist_validation": true,
+    "auto_advance": true
+  },
+  "planning": {
+    "max_plans_per_phase": 5,
+    "default_wave": 1
+  },
+  "gates": {
+    "require_verification": true,
+    "require_tests": true
+  },
+  "safety": {
+    "backup_before_destructive": true,
+    "max_file_changes_per_plan": 50
+  },
+  "custom_field": "preserved_for_strict_mode"
+}

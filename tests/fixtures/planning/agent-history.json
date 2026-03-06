@@ -1,0 +1,25 @@
+[
+  {
+    "agent_id": "agent-001",
+    "agent_type": "planner",
+    "phase": "01",
+    "plan": "01",
+    "started_at": "2026-03-06T19:00:00Z",
+    "ended_at": "2026-03-06T19:10:00Z"
+  },
+  {
+    "agent_id": "agent-002",
+    "agent_type": "executor",
+    "phase": "01",
+    "plan": "01",
+    "started_at": "2026-03-06T19:10:00Z",
+    "ended_at": "2026-03-06T19:45:00Z",
+    "extra_field": "some_custom_data"
+  },
+  {
+    "agent_id": "agent-003",
+    "agent_type": "verifier",
+    "phase": "01",
+    "started_at": "2026-03-06T19:45:00Z"
+  }
+]
