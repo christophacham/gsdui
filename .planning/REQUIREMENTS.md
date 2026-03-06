@@ -55,15 +55,15 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **STATE-08**: Parser extracts verification status from VERIFICATION.md frontmatter (passed/gaps_found/human_needed, score)
 - [ ] **STATE-09**: Parser reads config.json for workflow settings and agent routing defaults
 - [ ] **STATE-10**: Parser reads agent-history.json for agent execution timeline
-- [ ] **STATE-11**: SQLite database caches current parsed state for fast queries and page loads
-- [ ] **STATE-12**: Database stores historical execution metrics (durations, timelines) that persist across file changes
+- [x] **STATE-11**: SQLite database caches current parsed state for fast queries and page loads
+- [x] **STATE-12**: Database stores historical execution metrics (durations, timelines) that persist across file changes
 - [ ] **STATE-13**: WebSocket endpoint pushes state updates with snapshot + delta protocol
 - [ ] **STATE-14**: WebSocket reconnection restores full state via snapshot (no stale UI after network blip)
 - [ ] **STATE-15**: REST API serves project list, current state, and historical metrics
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: Axum daemon serves SvelteKit static assets, REST API, and WebSocket endpoints from single binary
+- [x] **INFRA-01**: Axum daemon serves SvelteKit static assets, REST API, and WebSocket endpoints from single binary
 - [ ] **INFRA-02**: Caddy reverse proxy with automatic HTTPS and forward_auth to oauth2-proxy
 - [ ] **INFRA-03**: Per-user project isolation — users only see and access their own registered projects
 - [ ] **INFRA-04**: User can register project folders (directories with `.planning/`)
@@ -157,12 +157,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | STATE-08 | Phase 1 | Pending |
 | STATE-09 | Phase 1 | Pending |
 | STATE-10 | Phase 1 | Pending |
-| STATE-11 | Phase 1 | Pending |
-| STATE-12 | Phase 1 | Pending |
+| STATE-11 | Phase 1 | Complete |
+| STATE-12 | Phase 1 | Complete |
 | STATE-13 | Phase 1 | Pending |
 | STATE-14 | Phase 1 | Pending |
 | STATE-15 | Phase 1 | Pending |
-| INFRA-01 | Phase 1 | Pending |
+| INFRA-01 | Phase 1 | Complete |
 | INFRA-02 | Phase 4 | Pending |
 | INFRA-03 | Phase 4 | Pending |
 | INFRA-04 | Phase 4 | Pending |
