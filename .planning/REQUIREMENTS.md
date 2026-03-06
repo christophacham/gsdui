@@ -11,13 +11,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **PIPE-01**: User can view horizontal phase timeline showing all phases with status badges, names, and progress bars
 - [x] **PIPE-02**: User can click a phase to see the 4-stage detail rail (Discuss → Plan → Execute → Verify) with current position
-- [ ] **PIPE-03**: User can see wave swim lanes within the execute stage, with plan cards arranged by dependency
-- [ ] **PIPE-04**: Plan cards show agent badge, status (queued/working/done/failed), wave number, step progress, and commit stats
-- [ ] **PIPE-05**: User can expand plan card output to see live agent stream or jump to Console tab
-- [ ] **PIPE-06**: Plan cards show links to view PLAN.md, diff, and SUMMARY.md
+- [x] **PIPE-03**: User can see wave swim lanes within the execute stage, with plan cards arranged by dependency
+- [x] **PIPE-04**: Plan cards show agent badge, status (queued/working/done/failed), wave number, step progress, and commit stats
+- [x] **PIPE-05**: User can expand plan card output to see live agent stream or jump to Console tab
+- [x] **PIPE-06**: Plan cards show links to view PLAN.md, diff, and SUMMARY.md
 - [x] **PIPE-07**: Phase chips show decimal phase numbers (2.1, 2.2) sorted numerically
 - [x] **PIPE-08**: Phases group by milestone when multiple milestones exist, with completed milestones collapsible
-- [ ] **PIPE-09**: Dependency arrows show between plans within wave visualization
+- [x] **PIPE-09**: Dependency arrows show between plans within wave visualization
 - [ ] **PIPE-10**: Agent routing configuration UI with project default → stage override → plan override hierarchy
 - [x] **PIPE-11**: Pipeline updates in real-time via WebSocket without page refresh
 - [x] **PIPE-12**: Duration and timing display on phase chips and plan cards
@@ -74,7 +74,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **UI-01**: Dark navy Aurora theme with CSS custom properties (tokens from non-planar project)
 - [x] **UI-02**: Color palette uses #040814 → #0a1224 → #0f1a31 → #162543 background hierarchy
-- [ ] **UI-03**: Agent badges with distinct colors per agent type (Claude, Codex, Gemini)
+- [x] **UI-03**: Agent badges with distinct colors per agent type (Claude, Codex, Gemini)
 - [x] **UI-04**: Top-level tab navigation: Pipeline, Console, System
 - [x] **UI-05**: Project sidebar with selection indicator and active execution badge
 - [x] **UI-06**: Skeleton loading states while WebSocket connection establishes
@@ -122,13 +122,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | PIPE-01 | Phase 2 | Complete |
 | PIPE-02 | Phase 2 | Complete |
-| PIPE-03 | Phase 2 | Pending |
-| PIPE-04 | Phase 2 | Pending |
-| PIPE-05 | Phase 2 | Pending |
-| PIPE-06 | Phase 2 | Pending |
+| PIPE-03 | Phase 2 | Complete |
+| PIPE-04 | Phase 2 | Complete |
+| PIPE-05 | Phase 2 | Complete |
+| PIPE-06 | Phase 2 | Complete |
 | PIPE-07 | Phase 2 | Complete |
 | PIPE-08 | Phase 2 | Complete |
-| PIPE-09 | Phase 2 | Pending |
+| PIPE-09 | Phase 2 | Complete |
 | PIPE-10 | Phase 2 | Pending |
 | PIPE-11 | Phase 2 | Complete |
 | PIPE-12 | Phase 2 | Complete |
@@ -170,7 +170,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-06 | Phase 4 | Pending |
 | UI-01 | Phase 2 | Complete |
 | UI-02 | Phase 2 | Complete |
-| UI-03 | Phase 2 | Pending |
+| UI-03 | Phase 2 | Complete |
 | UI-04 | Phase 2 | Complete |
 | UI-05 | Phase 2 | Complete |
 | UI-06 | Phase 2 | Complete |

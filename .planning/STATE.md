@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 02-02 Phase timeline and stage rail
-last_updated: "2026-03-06T22:28:00Z"
-last_activity: 2026-03-06 -- Plan 02-02 executed (phase timeline, chips, stage rail, milestone grouping, pipeline page wiring)
+stopped_at: Completed 02-03 Wave swim lanes and plan cards
+last_updated: "2026-03-06T22:30:31Z"
+last_activity: 2026-03-06 -- Plan 02-03 executed (wave lanes, plan cards, dependency arrows, agent badges, file viewers)
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 12
-  completed_plans: 6
-  percent: 50
+  completed_plans: 7
+  percent: 58
 ---
 
 # Project State
@@ -26,28 +26,28 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 ## Current Position
 
 Phase: 2 of 4 (Pipeline Dashboard)
-Plan: 2 of 4 in current phase
+Plan: 3 of 4 in current phase
 Status: In Progress
-Last activity: 2026-03-06 -- Plan 02-02 executed (phase timeline, chips, stage rail, milestone grouping, pipeline page wiring)
+Last activity: 2026-03-06 -- Plan 02-03 executed (wave lanes, plan cards, dependency arrows, agent badges, file viewers)
 
-Progress: [*****░░░░░] 50%
+Progress: [*****░░░░░] 58%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 9.3 min
-- Total execution time: 0.93 hours
+- Total plans completed: 7
+- Average duration: 8.9 min
+- Total execution time: 1.03 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1 - Backend Foundation | 4/4 | 42 min | 10.5 min |
-| 2 - Pipeline Dashboard | 2/4 | 14 min | 7.0 min |
+| 2 - Pipeline Dashboard | 3/4 | 21 min | 7.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 8, 14, 11, 10, 4 min
+- Last 5 plans: 14, 11, 10, 4, 7 min
 - Trend: accelerating
 
 *Updated after each plan completion*
@@ -84,6 +84,10 @@ Recent decisions affecting current work:
 - 02-02: Stage rail maps 7 backend stages to 4 GSD stages with pulsing glow on executing
 - 02-02: Auto-selection priority for phase timeline: executing > next pending > last phase
 - 02-02: Completed milestones auto-collapse on load; current milestone always expanded
+- 02-03: Manual +/- line coloring for DiffPanel (avoids @git-diff-view/svelte Svelte 5 compatibility risk)
+- 02-03: color-mix() CSS for AgentBadge backgrounds (15% agent color tint)
+- 02-03: MutationObserver + ResizeObserver for dependency arrow auto-recalculation
+- 02-03: Wave lanes only render when phase stage is planned_ready or later
 
 ### Pending Todos
 
@@ -97,6 +101,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T22:28:00Z
-Stopped at: Completed 02-02-PLAN.md
-Resume file: .planning/phases/02-pipeline-dashboard/02-02-SUMMARY.md
+Last session: 2026-03-06T22:30:31Z
+Stopped at: Completed 02-03-PLAN.md
+Resume file: .planning/phases/02-pipeline-dashboard/02-03-SUMMARY.md
