@@ -29,6 +29,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 futures-util = "0.3"
 
 # Utilities
+urlencoding = "2"
 uuid = { version = "1", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 regex = "1"

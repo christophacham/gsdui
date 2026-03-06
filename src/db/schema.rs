@@ -452,3 +452,174 @@ pub async fn get_config_for_project(
     .fetch_optional(pool)
     .await
 }
+
+// --- Filtered queries for REST API ---
+
+/// Filter parameters for execution runs.
+pub struct RunFilters {
+    pub phase: Option<String>,
+    pub plan: Option<String>,
+    pub status: Option<String>,
+    pub from: Option<String>,
+    pub to: Option<String>,
+    pub limit: i64,
+    pub offset: i64,
+}
+
+/// Pagination metadata.
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct PaginationMeta {
+    pub total: i64,
+    pub limit: i64,
+    pub offset: i64,
+}
+
+/// Get execution runs with filters and pagination.
+pub async fn get_runs_filtered(
+    pool: &SqlitePool,
+    project_id: &str,
+    filters: &RunFilters,
+) -> Result<(Vec<ExecutionRun>, PaginationMeta), sqlx::Error> {
+    // Build dynamic WHERE clause
+    let mut conditions = vec!["project_id = ?1".to_string()];
+    let mut bind_idx = 2u32;
+
+    if filters.phase.is_some() {
+        conditions.push(format!("phase_number = ?{}", bind_idx));
+        bind_idx += 1;
+    }
+    if filters.plan.is_some() {
+        conditions.push(format!("plan_number = ?{}", bind_idx));
+        bind_idx += 1;
+    }
+    if filters.status.is_some() {
+        conditions.push(format!("status = ?{}", bind_idx));
+        bind_idx += 1;
+    }
+    if filters.from.is_some() {
+        conditions.push(format!("created_at >= ?{}", bind_idx));
+        bind_idx += 1;
+    }
+    if filters.to.is_some() {
+        conditions.push(format!("created_at <= ?{}", bind_idx));
+        bind_idx += 1;
+    }
+
+    let where_clause = conditions.join(" AND ");
+
+    // Count total
+    let count_sql = format!("SELECT COUNT(*) FROM execution_runs WHERE {}", where_clause);
+    let mut count_query = sqlx::query_scalar::<_, i64>(&count_sql).bind(project_id);
+    if let Some(ref v) = filters.phase { count_query = count_query.bind(v); }
+    if let Some(ref v) = filters.plan { count_query = count_query.bind(v); }
+    if let Some(ref v) = filters.status { count_query = count_query.bind(v); }
+    if let Some(ref v) = filters.from { count_query = count_query.bind(v); }
+    if let Some(ref v) = filters.to { count_query = count_query.bind(v); }
+    let total: i64 = count_query.fetch_one(pool).await?;
+
+    // Fetch rows
+    let data_sql = format!(
+        "SELECT * FROM execution_runs WHERE {} ORDER BY created_at DESC LIMIT ?{} OFFSET ?{}",
+        where_clause, bind_idx, bind_idx + 1
+    );
+    let mut data_query = sqlx::query_as::<_, ExecutionRun>(&data_sql).bind(project_id);
+    if let Some(ref v) = filters.phase { data_query = data_query.bind(v); }
+    if let Some(ref v) = filters.plan { data_query = data_query.bind(v); }
+    if let Some(ref v) = filters.status { data_query = data_query.bind(v); }
+    if let Some(ref v) = filters.from { data_query = data_query.bind(v); }
+    if let Some(ref v) = filters.to { data_query = data_query.bind(v); }
+    data_query = data_query.bind(filters.limit).bind(filters.offset);
+    let runs = data_query.fetch_all(pool).await?;
+
+    Ok((runs, PaginationMeta {
+        total,
+        limit: filters.limit,
+        offset: filters.offset,
+    }))
+}
+
+/// Filter parameters for agent sessions.
+pub struct SessionFilters {
+    pub agent_type: Option<String>,
+    pub phase: Option<String>,
+    pub from: Option<String>,
+    pub to: Option<String>,
+}
+
+/// Get agent sessions with filters.
+pub async fn get_sessions_filtered(
+    pool: &SqlitePool,
+    project_id: &str,
+    filters: &SessionFilters,
+) -> Result<Vec<AgentSession>, sqlx::Error> {
+    let mut conditions = vec!["project_id = ?1".to_string()];
+    let mut bind_idx = 2u32;
+
+    if filters.agent_type.is_some() {
+        conditions.push(format!("agent_type = ?{}", bind_idx));
+        bind_idx += 1;
+    }
+    if filters.phase.is_some() {
+        conditions.push(format!("phase_number = ?{}", bind_idx));
+        bind_idx += 1;
+    }
+    if filters.from.is_some() {
+        conditions.push(format!("started_at >= ?{}", bind_idx));
+        bind_idx += 1;
+    }
+    if filters.to.is_some() {
+        conditions.push(format!("started_at <= ?{}", bind_idx));
+        bind_idx += 1;
+    }
+
+    let _ = bind_idx; // suppress warning
+
+    let where_clause = conditions.join(" AND ");
+    let sql = format!(
+        "SELECT * FROM agent_sessions WHERE {} ORDER BY started_at",
+        where_clause
+    );
+
+    let mut query = sqlx::query_as::<_, AgentSession>(&sql).bind(project_id);
+    if let Some(ref v) = filters.agent_type { query = query.bind(v); }
+    if let Some(ref v) = filters.phase { query = query.bind(v); }
+    if let Some(ref v) = filters.from { query = query.bind(v); }
+    if let Some(ref v) = filters.to { query = query.bind(v); }
+
+    query.fetch_all(pool).await
+}
+
+/// Get a single execution run by ID.
+pub async fn get_run_by_id(
+    pool: &SqlitePool,
+    run_id: i64,
+) -> Result<Option<ExecutionRun>, sqlx::Error> {
+    sqlx::query_as::<_, ExecutionRun>(
+        "SELECT * FROM execution_runs WHERE id = ?",
+    )
+    .bind(run_id)
+    .fetch_optional(pool)
+    .await
+}
+
+/// Get all parse errors (active + resolved) count per project.
+pub async fn get_parse_error_counts(
+    pool: &SqlitePool,
+    project_id: &str,
+) -> Result<(i64, i64), sqlx::Error> {
+    let active: i64 = sqlx::query_scalar(
+        "SELECT COUNT(*) FROM parse_errors WHERE project_id = ? AND resolved_at IS NULL",
+    )
+    .bind(project_id)
+    .fetch_one(pool)
+    .await?;
+
+    let resolved: i64 = sqlx::query_scalar(
+        "SELECT COUNT(*) FROM parse_errors WHERE project_id = ? AND resolved_at IS NOT NULL",
+    )
+    .bind(project_id)
+    .fetch_one(pool)
+    .await?;
+
+    Ok((active, resolved))
+}
