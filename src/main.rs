@@ -2,18 +2,21 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use axum::Router;
+use axum::routing::get;
 use tokio::sync::{broadcast, mpsc};
 use tokio_util::sync::CancellationToken;
 use tower_http::services::{ServeDir, ServeFile};
 use tracing_subscriber::EnvFilter;
 
 use gsdui::api;
+use gsdui::broadcast::Broadcaster;
 use gsdui::config::DaemonConfig;
 use gsdui::db;
 use gsdui::state::AppState;
 use gsdui::watcher;
 use gsdui::watcher::pipeline;
 use gsdui::watcher::retention;
+use gsdui::ws;
 
 #[tokio::main]
 async fn main() {
@@ -52,8 +55,11 @@ async fn main() {
     // Debounced events: debouncer -> pipeline (capacity 128)
     let (debounced_tx, debounced_rx) = mpsc::channel(128);
 
-    // State updates: pipeline -> WebSocket clients (capacity 64)
+    // State updates: pipeline -> broadcast forwarder (capacity 64)
     let (broadcast_tx, _broadcast_rx) = broadcast::channel(64);
+
+    // Per-project broadcaster for WebSocket clients
+    let broadcaster = Broadcaster::new();
 
     // --- Spawn background tasks ---
 
@@ -157,11 +163,44 @@ async fn main() {
         start_time: Instant::now(),
         broadcast_tx: broadcast_tx.clone(),
         file_event_tx,
+        broadcaster,
     });
 
-    // Build router with API routes and static file fallback
+    // --- Spawn broadcast forwarder ---
+    // Subscribes to pipeline's broadcast channel and forwards to per-project Broadcaster
+    let forwarder_state = state.clone();
+    let mut forwarder_rx = broadcast_tx.subscribe();
+    let forwarder_cancel = cancel.clone();
+    let forwarder_handle = tokio::spawn(async move {
+        loop {
+            tokio::select! {
+                result = forwarder_rx.recv() => {
+                    match result {
+                        Ok(update) => {
+                            let project_id = update.project_id.clone();
+                            let _ = forwarder_state.broadcaster.broadcast(&project_id, update).await;
+                        }
+                        Err(broadcast::error::RecvError::Lagged(count)) => {
+                            tracing::warn!(lagged = count, "Broadcast forwarder lagged, skipped messages");
+                        }
+                        Err(broadcast::error::RecvError::Closed) => {
+                            tracing::info!("Broadcast forwarder shutting down (channel closed)");
+                            break;
+                        }
+                    }
+                }
+                _ = forwarder_cancel.cancelled() => {
+                    tracing::info!("Broadcast forwarder shutting down (cancelled)");
+                    break;
+                }
+            }
+        }
+    });
+
+    // Build router with API routes, WebSocket, and static file fallback
     let static_dir = config.static_dir.clone();
     let app = Router::new()
+        .route("/api/v1/ws/state", get(ws::ws_handler))
         .nest("/api/v1", api::router())
         .fallback_service(
             ServeDir::new(&static_dir).not_found_service(
@@ -197,6 +236,7 @@ async fn main() {
     debouncer_handle.abort();
     pipeline_handle.abort();
     retention_handle.abort();
+    forwarder_handle.abort();
 
     tracing::info!("Shutdown complete");
 }

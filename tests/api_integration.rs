@@ -3,6 +3,7 @@ use std::time::Instant;
 
 use axum::Router;
 use gsdui::api;
+use gsdui::broadcast::Broadcaster;
 use gsdui::config::DaemonConfig;
 use gsdui::db;
 use gsdui::state::AppState;
@@ -30,6 +31,7 @@ async fn spawn_test_server() -> String {
         start_time: Instant::now(),
         broadcast_tx,
         file_event_tx,
+        broadcaster: Broadcaster::new(),
     });
 
     let app = Router::new()
