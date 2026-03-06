@@ -29,12 +29,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. A WebSocket client connecting to `/api/ws/state` receives a full state snapshot immediately, then receives delta updates as files change
   4. WebSocket client that disconnects and reconnects receives a fresh snapshot with no stale data
   5. REST API returns project list and current parsed state for any registered project
-**Plans**: TBD
+**Plans:** 4 plans
 
 Plans:
-- [ ] 01-01: Axum server skeleton, SQLite schema and migrations, project registration
-- [ ] 01-02: File watcher (inotify + debounce) and GSD state file parsers
-- [ ] 01-03: WebSocket state endpoint (snapshot + delta), REST API, broadcaster
+- [ ] 01-01-PLAN.md -- Rust project scaffold, Cargo.toml, SQLite schema, database layer, project CRUD REST API, health endpoint
+- [ ] 01-02-PLAN.md -- GSD state file parsers (frontmatter extractor, 7 file-type parsers, stage derivation) with TDD
+- [ ] 01-03-PLAN.md -- File watcher with custom per-file debouncer, parse pipeline connecting watcher to parsers to database
+- [ ] 01-04-PLAN.md -- WebSocket state endpoint (snapshot + delta), broadcaster, REST API for state/history/files
 
 ### Phase 2: Pipeline Dashboard
 **Goal**: Users can see the full GSD pipeline status for any project in real-time -- phase timeline, stage progression, plan cards with agent and status detail -- rendered in the Aurora dark navy theme
@@ -93,7 +94,7 @@ Note: Phase 3 depends only on Phase 1, so it can begin after Phase 1 completes (
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Backend Foundation and State Pipeline | 0/3 | Not started | - |
+| 1. Backend Foundation and State Pipeline | 0/4 | Not started | - |
 | 2. Pipeline Dashboard | 0/3 | Not started | - |
 | 3. Interactive Terminal System | 0/2 | Not started | - |
 | 4. Multi-User, System Monitoring, and Production | 0/2 | Not started | - |
