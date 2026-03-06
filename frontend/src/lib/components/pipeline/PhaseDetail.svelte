@@ -3,20 +3,22 @@
 	 * Phase detail view.
 	 *
 	 * Shows the selected phase's header (name, goal, requirements),
-	 * stage rail progression, and a placeholder area for wave swim lanes
-	 * (to be filled by Plan 03).
+	 * stage rail progression, and wave swim lanes with plan cards.
 	 */
 
 	import { projectStore } from '$lib/stores/project.svelte.js';
 	import StageRail from './StageRail.svelte';
+	import WaveContainer from './WaveContainer.svelte';
 	import Skeleton from '$lib/components/shared/Skeleton.svelte';
 
 	interface Props {
 		/** The currently selected phase number */
 		phaseNumber: string;
+		/** Project ID for file API URLs */
+		projectId: string;
 	}
 
-	let { phaseNumber }: Props = $props();
+	let { phaseNumber, projectId }: Props = $props();
 
 	/** Find the phase data from the project store */
 	const phase = $derived(
@@ -30,6 +32,16 @@
 	const requirementCount = $derived(
 		phase?.requirements ? phase.requirements.split(',').filter((r) => r.trim()).length : 0
 	);
+
+	/** Stages that indicate plans exist and wave lanes should render */
+	const planReadyStages = new Set([
+		'planned_ready',
+		'executing',
+		'executed',
+		'verified'
+	]);
+
+	const showWaveLanes = $derived(phase ? planReadyStages.has(phase.stage) : false);
 </script>
 
 {#if !phase}
@@ -59,14 +71,20 @@
 
 		<StageRail currentStage={phase.stage} />
 
-		<div class="wave-placeholder" id="wave-container">
-			<p class="placeholder-text">
-				{#if plans.length > 0}
-					{plans.length} plan{plans.length > 1 ? 's' : ''} in this phase. Wave swim lanes will render here.
-				{:else}
-					No plans found for this phase.
-				{/if}
-			</p>
+		<div class="wave-section">
+			{#if showWaveLanes}
+				<WaveContainer {phaseNumber} {projectId} />
+			{:else if plans.length > 0}
+				<div class="not-planned-message">
+					<p>{plans.length} plan{plans.length > 1 ? 's' : ''} in this phase.</p>
+					<p class="stage-hint">Plans will appear as wave lanes once planning is complete.</p>
+				</div>
+			{:else}
+				<div class="not-planned-message">
+					<p>Phase has not been planned yet.</p>
+					<p class="stage-hint">Current stage: {phase?.stage ?? 'unknown'}</p>
+				</div>
+			{/if}
 		</div>
 	</div>
 {/if}
@@ -126,18 +144,30 @@
 		line-height: 1.5;
 	}
 
-	.wave-placeholder {
+	.wave-section {
 		margin-top: var(--space-4);
+		flex: 1;
+		overflow-y: auto;
+	}
+
+	.not-planned-message {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		min-height: 120px;
+		gap: var(--space-2);
 		padding: var(--space-6);
 		background: var(--bg-surface);
 		border: 1px dashed var(--border-subtle);
 		border-radius: 8px;
 		text-align: center;
-	}
-
-	.placeholder-text {
 		color: var(--fg-muted);
 		font-size: var(--text-sm);
-		margin: 0;
+	}
+
+	.stage-hint {
+		font-size: var(--text-xs);
+		font-style: italic;
 	}
 </style>

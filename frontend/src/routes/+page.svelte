@@ -39,8 +39,10 @@
 				onPhaseSelect={handlePhaseSelect}
 				{selectedPhaseNumber}
 			/>
-			{#if selectedPhaseNumber}
-				<PhaseDetail phaseNumber={selectedPhaseNumber} />
+			{#if selectedPhaseNumber && projectStore.selectedProjectId}
+				<div class="detail-area">
+					<PhaseDetail phaseNumber={selectedPhaseNumber} projectId={projectStore.selectedProjectId} />
+				</div>
 			{/if}
 		</div>
 	{/if}
@@ -94,5 +96,10 @@
 		flex-direction: column;
 		height: 100%;
 		overflow: hidden;
+	}
+
+	.detail-area {
+		flex: 1;
+		overflow-y: auto;
 	}
 </style>
