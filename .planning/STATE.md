@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-03-06T20:06:23Z"
-last_activity: 2026-03-06 -- Plan 01-02 executed (GSD state file parsers, 9 modules, 64 tests)
+stopped_at: Completed 01-03-PLAN.md
+last_updated: "2026-03-06T20:24:26Z"
+last_activity: 2026-03-06 -- Plan 01-03 executed (file watcher, parse pipeline, retention pruning, 105 tests)
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 11
-  completed_plans: 2
-  percent: 18
+  completed_plans: 3
+  percent: 27
 ---
 
 # Project State
@@ -26,27 +26,27 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 ## Current Position
 
 Phase: 1 of 4 (Backend Foundation and State Pipeline)
-Plan: 2 of 4 in current phase
+Plan: 3 of 4 in current phase
 Status: Executing
-Last activity: 2026-03-06 -- Plan 01-02 executed (GSD state file parsers, 9 modules, 64 tests)
+Last activity: 2026-03-06 -- Plan 01-03 executed (file watcher, parse pipeline, retention pruning, 105 tests)
 
-Progress: [**░░░░░░░░] 18%
+Progress: [***░░░░░░░] 27%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: 8.5 min
-- Total execution time: 0.28 hours
+- Total plans completed: 3
+- Average duration: 10.3 min
+- Total execution time: 0.52 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 - Backend Foundation | 2/4 | 17 min | 8.5 min |
+| 1 - Backend Foundation | 3/4 | 31 min | 10.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 9, 8 min
+- Last 5 plans: 9, 8, 14 min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -67,6 +67,10 @@ Recent decisions affecting current work:
 - 01-02: Parser output types are owned structs separate from DB row types (decouples parsing from storage)
 - 01-02: All frontmatter fields are Option<T> for resilience against partial/incomplete files
 - 01-02: Used serde flatten for agent-history unknown field capture (strict mode)
+- 01-03: Per-file debounce with HashMap<PathBuf, JoinHandle> and 75ms default delay
+- 01-03: Phase number normalization (ROADMAP "1" -> filesystem "01") for consistent DB keys
+- 01-03: bootstrap_project reusable for both registration and startup reconciliation
+- 01-03: Retention pruning only deletes resolved parse errors (unresolved kept regardless of age)
 
 ### Pending Todos
 
@@ -80,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T20:06:23Z
-Stopped at: Completed 01-02-PLAN.md
-Resume file: .planning/phases/01-backend-foundation-and-state-pipeline/01-02-SUMMARY.md
+Last session: 2026-03-06T20:24:26Z
+Stopped at: Completed 01-03-PLAN.md
+Resume file: .planning/phases/01-backend-foundation-and-state-pipeline/01-03-SUMMARY.md

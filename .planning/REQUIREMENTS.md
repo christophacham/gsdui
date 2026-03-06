@@ -45,7 +45,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### State Pipeline
 
-- [ ] **STATE-01**: Daemon watches `.planning/` directories recursively via inotify with debouncing (50-100ms)
+- [x] **STATE-01**: Daemon watches `.planning/` directories recursively via inotify with debouncing (50-100ms)
 - [x] **STATE-02**: Parser extracts state from STATE.md frontmatter (status, progress, milestone, timestamps)
 - [x] **STATE-03**: Parser extracts phase list from ROADMAP.md (names, goals, dependencies, completion)
 - [x] **STATE-04**: Parser extracts plan metadata from PLAN.md frontmatter (wave, depends_on, type, requirements)
@@ -147,7 +147,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SYS-03 | Phase 4 | Pending |
 | SYS-04 | Phase 4 | Pending |
 | SYS-05 | Phase 4 | Pending |
-| STATE-01 | Phase 1 | Pending |
+| STATE-01 | Phase 1 | Complete |
 | STATE-02 | Phase 1 | Complete |
 | STATE-03 | Phase 1 | Complete |
 | STATE-04 | Phase 1 | Complete |
