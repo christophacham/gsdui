@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Phase 2 context gathered
-last_updated: "2026-03-06T21:45:26.707Z"
-last_activity: 2026-03-06 -- Plan 01-04 executed (WebSocket + REST API, per-project broadcaster, 134 tests)
+status: in-progress
+stopped_at: Completed 02-01 SvelteKit scaffold and layout shell
+last_updated: "2026-03-06T22:19:44Z"
+last_activity: 2026-03-06 -- Plan 02-01 executed (SvelteKit scaffold, Aurora theme, WebSocket store, layout shell)
 progress:
   total_phases: 4
   completed_phases: 1
-  total_plans: 4
-  completed_plans: 4
-  percent: 36
+  total_plans: 12
+  completed_plans: 5
+  percent: 42
 ---
 
 # Project State
@@ -21,32 +21,33 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-06)
 
 **Core value:** Users can see what GSD is doing across all their projects in real-time and interact with running agent sessions from the browser
-**Current focus:** Phase 1: Backend Foundation and State Pipeline
+**Current focus:** Phase 2: Pipeline Dashboard
 
 ## Current Position
 
-Phase: 1 of 4 (Backend Foundation and State Pipeline)
-Plan: 4 of 4 in current phase
-Status: Phase 1 Complete
-Last activity: 2026-03-06 -- Plan 01-04 executed (WebSocket + REST API, per-project broadcaster, 134 tests)
+Phase: 2 of 4 (Pipeline Dashboard)
+Plan: 1 of 4 in current phase
+Status: In Progress
+Last activity: 2026-03-06 -- Plan 02-01 executed (SvelteKit scaffold, Aurora theme, WebSocket store, layout shell)
 
-Progress: [****░░░░░░] 36%
+Progress: [****░░░░░░] 42%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 10.5 min
-- Total execution time: 0.70 hours
+- Total plans completed: 5
+- Average duration: 10.4 min
+- Total execution time: 0.87 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1 - Backend Foundation | 4/4 | 42 min | 10.5 min |
+| 2 - Pipeline Dashboard | 1/4 | 10 min | 10.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 9, 8, 14, 11 min
+- Last 5 plans: 9, 8, 14, 11, 10 min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -75,6 +76,10 @@ Recent decisions affecting current work:
 - 01-04: WebSocket requires Subscribe as first message within 10-second timeout
 - 01-04: build_project_state() shared between WebSocket snapshot and REST /state endpoint (DRY)
 - 01-04: Dual path traversal prevention: string check + canonicalize comparison
+- 02-01: Class-based Svelte 5 rune stores with singleton exports for all shared state
+- 02-01: WebSocket message routing wired in ProjectStore constructor
+- 02-01: ConfigUpdated/AgentHistoryUpdated deltas reload full state via REST (delta lacks payload)
+- 02-01: svelte-5-french-toast@2 (not @0.0.5 from research -- package versioning changed)
 
 ### Pending Todos
 
@@ -88,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T21:45:26.703Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-pipeline-dashboard/02-CONTEXT.md
+Last session: 2026-03-06T22:19:44Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: .planning/phases/02-pipeline-dashboard/02-01-SUMMARY.md

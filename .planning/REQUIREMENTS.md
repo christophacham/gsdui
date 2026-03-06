@@ -19,7 +19,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **PIPE-08**: Phases group by milestone when multiple milestones exist, with completed milestones collapsible
 - [ ] **PIPE-09**: Dependency arrows show between plans within wave visualization
 - [ ] **PIPE-10**: Agent routing configuration UI with project default → stage override → plan override hierarchy
-- [ ] **PIPE-11**: Pipeline updates in real-time via WebSocket without page refresh
+- [x] **PIPE-11**: Pipeline updates in real-time via WebSocket without page refresh
 - [ ] **PIPE-12**: Duration and timing display on phase chips and plan cards
 
 ### Console / Terminal
@@ -72,13 +72,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Theme / UI
 
-- [ ] **UI-01**: Dark navy Aurora theme with CSS custom properties (tokens from non-planar project)
-- [ ] **UI-02**: Color palette uses #040814 → #0a1224 → #0f1a31 → #162543 background hierarchy
+- [x] **UI-01**: Dark navy Aurora theme with CSS custom properties (tokens from non-planar project)
+- [x] **UI-02**: Color palette uses #040814 → #0a1224 → #0f1a31 → #162543 background hierarchy
 - [ ] **UI-03**: Agent badges with distinct colors per agent type (Claude, Codex, Gemini)
-- [ ] **UI-04**: Top-level tab navigation: Pipeline, Console, System
-- [ ] **UI-05**: Project sidebar with selection indicator and active execution badge
-- [ ] **UI-06**: Skeleton loading states while WebSocket connection establishes
-- [ ] **UI-07**: Visible reconnecting indicator when WebSocket drops
+- [x] **UI-04**: Top-level tab navigation: Pipeline, Console, System
+- [x] **UI-05**: Project sidebar with selection indicator and active execution badge
+- [x] **UI-06**: Skeleton loading states while WebSocket connection establishes
+- [x] **UI-07**: Visible reconnecting indicator when WebSocket drops
 
 ## v2 Requirements
 
@@ -130,7 +130,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PIPE-08 | Phase 2 | Pending |
 | PIPE-09 | Phase 2 | Pending |
 | PIPE-10 | Phase 2 | Pending |
-| PIPE-11 | Phase 2 | Pending |
+| PIPE-11 | Phase 2 | Complete |
 | PIPE-12 | Phase 2 | Pending |
 | TERM-01 | Phase 3 | Pending |
 | TERM-02 | Phase 3 | Pending |
@@ -168,13 +168,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-04 | Phase 4 | Pending |
 | INFRA-05 | Phase 4 | Pending |
 | INFRA-06 | Phase 4 | Pending |
-| UI-01 | Phase 2 | Pending |
-| UI-02 | Phase 2 | Pending |
+| UI-01 | Phase 2 | Complete |
+| UI-02 | Phase 2 | Complete |
 | UI-03 | Phase 2 | Pending |
-| UI-04 | Phase 2 | Pending |
-| UI-05 | Phase 2 | Pending |
-| UI-06 | Phase 2 | Pending |
-| UI-07 | Phase 2 | Pending |
+| UI-04 | Phase 2 | Complete |
+| UI-05 | Phase 2 | Complete |
+| UI-06 | Phase 2 | Complete |
+| UI-07 | Phase 2 | Complete |
 
 **Coverage:**
 - v1 requirements: 55 total

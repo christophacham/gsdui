@@ -50,7 +50,7 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 02-01-PLAN.md -- SvelteKit scaffold, Aurora theme tokens, TypeScript types, WebSocket store, layout shell (sidebar, tabs, reconnect banner, skeletons)
+- [x] 02-01-PLAN.md -- SvelteKit scaffold, Aurora theme tokens, TypeScript types, WebSocket store, layout shell (sidebar, tabs, reconnect banner, skeletons)
 - [ ] 02-02-PLAN.md -- Phase timeline with chips, milestone grouping, stage rail, phase detail view
 - [ ] 02-03-PLAN.md -- Wave swim lanes, plan cards, dependency arrows, agent badges, file viewer panels
 - [ ] 02-04-PLAN.md -- Backend config endpoint, agent routing UI, settings panel, final integration
@@ -96,6 +96,6 @@ Note: Phase 3 depends only on Phase 1, so it can begin after Phase 1 completes (
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Backend Foundation and State Pipeline | 4/4 | Complete | 2026-03-06 |
-| 2. Pipeline Dashboard | 0/4 | Not started | - |
+| 2. Pipeline Dashboard | 1/4 | In progress | - |
 | 3. Interactive Terminal System | 0/2 | Not started | - |
 | 4. Multi-User, System Monitoring, and Production | 0/2 | Not started | - |
