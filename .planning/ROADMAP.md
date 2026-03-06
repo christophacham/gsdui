@@ -34,8 +34,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01-PLAN.md -- Rust project scaffold, Cargo.toml, SQLite schema, database layer, project CRUD REST API, health endpoint
 - [x] 01-02-PLAN.md -- GSD state file parsers (frontmatter extractor, 7 file-type parsers, stage derivation) with TDD
-- [ ] 01-03-PLAN.md -- File watcher with custom per-file debouncer, parse pipeline connecting watcher to parsers to database
-- [ ] 01-04-PLAN.md -- WebSocket state endpoint (snapshot + delta), broadcaster, REST API for state/history/files
+- [x] 01-03-PLAN.md -- File watcher with custom per-file debouncer, parse pipeline connecting watcher to parsers to database
+- [x] 01-04-PLAN.md -- WebSocket state endpoint (snapshot + delta), broadcaster, REST API for state/history/files
 
 ### Phase 2: Pipeline Dashboard
 **Goal**: Users can see the full GSD pipeline status for any project in real-time -- phase timeline, stage progression, plan cards with agent and status detail -- rendered in the Aurora dark navy theme
@@ -47,12 +47,13 @@ Plans:
   3. User can expand a plan card to see live output or jump to Console, and can view links to PLAN.md, diff, and SUMMARY.md
   4. User can configure agent routing (project default, stage override, plan override) from the Pipeline tab
   5. The entire UI uses the Aurora dark navy theme with correct background hierarchy, agent-colored badges, skeleton loading states, and a visible reconnecting indicator on WebSocket drop
-**Plans**: TBD
+**Plans:** 4 plans
 
 Plans:
-- [ ] 02-01: SvelteKit project scaffold, Aurora theme tokens, layout shell (tab navigation, project sidebar)
-- [ ] 02-02: WebSocket client store, phase timeline, phase detail with stage rail
-- [ ] 02-03: Wave visualization, plan cards, agent routing UI, dependency arrows
+- [ ] 02-01-PLAN.md -- SvelteKit scaffold, Aurora theme tokens, TypeScript types, WebSocket store, layout shell (sidebar, tabs, reconnect banner, skeletons)
+- [ ] 02-02-PLAN.md -- Phase timeline with chips, milestone grouping, stage rail, phase detail view
+- [ ] 02-03-PLAN.md -- Wave swim lanes, plan cards, dependency arrows, agent badges, file viewer panels
+- [ ] 02-04-PLAN.md -- Backend config endpoint, agent routing UI, settings panel, final integration
 
 ### Phase 3: Interactive Terminal System
 **Goal**: Users can open interactive terminal sessions in the browser, run GSD commands, respond to agent prompts, and manage multiple terminal tabs -- all with full PTY fidelity
@@ -95,6 +96,6 @@ Note: Phase 3 depends only on Phase 1, so it can begin after Phase 1 completes (
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Backend Foundation and State Pipeline | 4/4 | Complete | 2026-03-06 |
-| 2. Pipeline Dashboard | 0/3 | Not started | - |
+| 2. Pipeline Dashboard | 0/4 | Not started | - |
 | 3. Interactive Terminal System | 0/2 | Not started | - |
 | 4. Multi-User, System Monitoring, and Production | 0/2 | Not started | - |
