@@ -4,6 +4,7 @@ pub mod projects;
 use std::sync::Arc;
 
 use axum::Router;
+use tower_http::cors::CorsLayer;
 
 use crate::state::AppState;
 
@@ -12,4 +13,5 @@ pub fn router() -> Router<Arc<AppState>> {
     Router::new()
         .nest("/projects", projects::router())
         .nest("/health", health::router())
+        .layer(CorsLayer::permissive())
 }
